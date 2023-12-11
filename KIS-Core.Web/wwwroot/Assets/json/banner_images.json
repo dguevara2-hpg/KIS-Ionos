@@ -1,0 +1,31 @@
+﻿[
+  {
+    "InsightCategory": "Category Insights",
+    "ImagePath": "wwwroot/Assets/img/banners_CategoryInsight.png"
+  },
+  {
+    "InsightCategory": "Conversion Insights",
+    "ImagePath": "wwwroot/Assets/img/banners_ConversionInsight.png"
+  },
+  {
+    "InsightCategory": "Evidence Insights",
+    "ImagePath": "wwwroot/Assets/img/banners_EvidenceInsight.png"
+  },
+  {
+    "InsightCategory": "Physician Insights",
+    "ImagePath": "wwwroot/Assets/img/banners_ProductInsight.png"
+  },
+  {
+    "InsightCategory": "Product Insights",
+    "ImagePath": "wwwroot/Assets/img/banners_ProductInsight.png"
+  },
+  {
+    "InsightCategory": "Supply Disruption",
+    "ImagePath": "wwwroot/Assets/img/banners_ConversionInsight.png"
+  },
+  {
+    "InsightCategory": "Toolkits and Checklists",
+    "ImagePath": "wwwroot/Assets/img/banners_Toolkits.png"
+  }
+]
+

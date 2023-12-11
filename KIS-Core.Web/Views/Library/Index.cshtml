@@ -1,0 +1,110 @@
+﻿@model KIS_Core.Web.Models.LibraryViewModel
+
+@{
+    ViewData["Title"] = "KM Library";
+}
+
+<script type="text/javascript" src="~/js/pages/library.js"></script>
+
+<br />
+<br />
+<br />
+<br />
+
+
+<div class="container-fluid mt-5 mb-5">
+
+    <main role="main" class="pb-3" style="min-height:500px;">
+
+        <div class="row">
+            <!-- FILTERS -->
+            <div class="col-md-4 pb-3" style="background-color:lightgray;min-height:300px;">
+                <div class="accordion p-3" id="accordionFilter">
+                    <div class="input-group add-on">
+                        <input class="form-control" placeholder="Search by Keyword" id="lb_global_srch_term" type="text">
+                        <div class="input-group-btn">
+                            <button id="btnLibrarySearch" class="btn btn-primary" type="submit" onclick="LibrarySearch()"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                    <br />
+
+                    <h4>APPLY FILTERS</h4>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="accSpecialty">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDepartment" aria-expanded="true" aria-controls="collapseDepartment">
+                                BY DEPARTMENT
+                            </button>
+                        </h2>
+                        <div id="collapseDepartment" class="accordion-collapse collapse" aria-labelledby="accDepartment" data-bs-parent="#accordionFilter">
+                            <div class="accordion-body">
+                                <ul class="nav flex-column">
+                                    @foreach (var _department in @Model.Departments)
+                                    {
+                                        <li id="serviceline-filter" class="nav-item">
+                                            <a id="serviceline_@_department.ToLower().Replace(" ", "")" class="nav-link filter serviceline" onclick="SaveFilter('serviceline',this)">@_department</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="accService">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpecialty" aria-expanded="false" aria-controls="collapseSpecialty">
+                                BY SPECIALTY
+                            </button>
+                        </h2>
+                        <div id="collapseSpecialty" class="accordion-collapse collapse" aria-labelledby="accSpecialty" data-bs-parent="#accordionFilter">
+                            <div class="accordion-body">
+                                <ul class="nav flex-column">
+                                    @foreach (var _special in @Model.Specialties)
+                                    {
+                                        <li id="specialty-filter" class="nav-item">
+                                            <a id="specialty_@_special.ToLower().Replace(" ", "")" class="nav-link filter specialty" onclick="SaveFilter('specialty',this)">@_special</a>
+                                        </li>
+
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="accContent">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContentType" aria-expanded="false" aria-controls="collapseContentType">
+                                CONTENT TYPE
+                            </button>
+                        </h2>
+                        <div id="collapseContentType" class="accordion-collapse collapse show" aria-labelledby="accContent" data-bs-parent="#accordionFilter">
+                            <div class="accordion-body">
+                                <ul class="nav flex-column">
+                                    @foreach (var _types in @Model.ContentTypes)
+                                    {
+                                        <li id="contenttype-filter" class="nav-item">
+                                            <a id="contenttype_@_types.ToLower().Replace(" ", "")" class="nav-link filter contenttype" onclick="SaveFilter('contenttype', this)">@_types</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RESULT CONTENT -->
+            <div class="col-md-8">
+                <div class="panel-group" style="min-height:300px;">     
+                    
+                    @await Component.InvokeAsync("LibraryResults", new { filter = ViewBag.Filter, value = ViewBag.Search, actions = ViewBag.Action } )
+                    
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+
+
+
+

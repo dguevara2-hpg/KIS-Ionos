@@ -1,0 +1,214 @@
+﻿<style>
+    .feedback {
+        background-color: white !important;
+        min-height: 350px;
+        z-index: -1 !important;
+        width: 300px !important;
+    }
+
+    .feedback h4, h7 {
+        /*color:slategrey !important;*/
+    }
+
+    .feedback textarea {
+        resize: none;
+    }
+
+
+    .fw-500 {
+        font-weight: 500 !important;
+    }
+
+    .thumb {
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+        font-size: 19px;
+        border: 1px solid #bbb;
+        line-height: 37px;
+        display: inline-block;
+        cursor: pointer;
+        transition: all 0.5s;
+    }
+
+    .thumbs-up, .thumbs-down {
+        padding-left: 3px;
+    }
+
+    .thumbs-up:hover, .up.active_vote {
+        color: #fff;
+        background-color: #11b4ef;
+        border: 1px solid #11b4ef;
+    }
+
+    .thumbs-down:hover, .down.active_vote {
+        color: #fff;
+        background-color: #11b4ef;
+        border: 1px solid #11b4ef;
+    }
+    
+    .sticky_button {
+        position: fixed;
+        bottom: -4px;
+        right: 10px;
+    }
+
+    .collapse-feedback {
+        background-color: #31B0D5;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 4px;
+        border-color: #46b8da;
+    }
+
+    .feedback_min{
+        border:none !important;
+        background:none !important;
+        margin-top: -8px !important;
+    }
+    
+    .feedback-form h4{
+        font-weight:normal;
+    }
+
+    .feedback h6 {
+        font-weight: normal;
+        color: gray;
+    }
+</style>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+
+    <div id="feedbackToast" class="toast feedback" role="alert" aria-live="assertive" aria-atomic="true">
+        <div id="ToastHeader" class="toast-header">
+            <strong class="me-auto">&nbsp;</strong>
+            <button type="button" class="feedback_min fa fa-window-minimize" onclick="MinimizeFeedback()" title="Minimize"  ></button>
+            <button type="button" class="btn-close btn-close" data-bs-dismiss="toast" aria-label="Close" onclick="CloseFeedback()" title="Close"></button>
+        </div>
+        <div class="toast-body">
+            <form id="feedback-form">
+                <input type="hidden" id="document_id" name="document_id" value="" />
+                <div class="row align-middle">
+                    <div class="col-12 text-center">
+                        <h4>Share your thoughts.</h4>
+                        <br />
+                        <h6>Was <span id="document_title" style="color: #0e396e" ></span> helpful?</h6>
+                    </div>
+
+                    <div class="row align-middle">
+                        <div class="col-12 text-center">
+                            <div class="row mb-3 mt-3 ">
+                                <div class="col-md-6">
+                                    <a id="vote_up" class="thumb thumbs-up up feedback-useful">
+                                        <i class="fa fa-thumbs-o-up"></i>
+                                    </a>
+                                    <small class="fw-500">Yes</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <a id="vote_down" class="thumb thumbs-down down feedback-useful">
+                                        <i class="fa fa-thumbs-o-down"></i>
+                                    </a>
+                                    <small class="fw-500">No</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 text-center mb-3">
+                        <h6>How can we improve it?</h6>
+                        <textarea name="area" cols="40" rows="5" class="feedback-improve"></textarea>
+                        <br />
+                        <br />
+                        <button type="button" class="btn btn-primary" onclick="SubmitFeedback()">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<div id="btnFeedback" class="sticky_button" style="display:none">
+    <button class="collapse-feedback" onclick="MaximizeFeedback()">My Feedback</button>
+</div>
+
+
+<script>
+
+    function MinimizeFeedback() {
+        $('#feedbackToast').hide();
+        $('#feedbackSearchToast').hide();
+
+        $('#btnFeedback').show();
+        $('#btnFeedbackSearch').hide();
+    }
+    function MaximizeFeedback() {
+        $('#feedbackToast').show();
+        $('#feedbackSearchToast').hide();
+
+        $('#btnFeedback').hide();
+        $('#btnFeedbackSearch').hide();
+    }
+    function ShowFeedback(docID, docTitle) {        
+        // STORE Document Click
+        $.ajax({
+            url: appPath + "/Library/DocumentClick",
+            type: "GET",
+            contentType: "application/json",
+            data: { id: docID, value: docTitle },
+            datatype: "json",
+            success: function (data) {
+                // Show Feedback 
+                var elem = document.getElementById("document_title");
+                var elemId = document.getElementById("document_id");
+                elem.innerHTML = docTitle;
+                elemId.value = docID;
+                $('#feedbackToast').show();
+                $('#feedbackSearchToast').hide();
+            }
+        });       
+
+    };
+    function CloseFeedback() {
+        $('#feedbackToast').hide();
+        $('#feedbackSearchToast').hide();
+    };
+    function SubmitFeedback() {
+        var helpful = "";
+        var feedback = "";
+        var docID = document.getElementById("document_id").value;
+
+        var feed_el = document.getElementsByClassName("feedback-useful");
+        for (var x = 0; x < feed_el.length; x++) {
+            if (feed_el[x].className.includes("active_vote")) {
+                helpful = feed_el[x].id;
+            }
+        };
+
+        var feedback = document.getElementsByClassName("feedback-improve")[0].value;
+        var selection = (helpful == "vote_up") ? "Yes" : "No";
+
+        var form = { docID: docID, selection: helpful, feedback: feedback };
+
+        $.ajax({
+            url: appPath + "/Feedback/FeedbackClick",
+            type: "GET",
+            contentType: "application/json",
+            data: { docID: docID, selection: selection, feedback: feedback },  //{ formObj: form },
+            datatype: "json",
+            success: function (data) {
+            }
+        });
+
+        CloseFeedback();
+    };
+
+    $(document).ready(function () {
+        $(".thumb").click(function () {
+            $(".thumb").removeClass('active_vote');
+            $(this).toggleClass('active_vote');
+        });
+    });
+
+</script>
+

@@ -1,0 +1,70 @@
+﻿@model KIS_Core.Web.Models.RecentlyCompletedViewModel
+
+<section class="page-section mb-5" id="RecentlyCompleted">
+
+    <div class="text-center">
+        <h2 class="section-heading text-uppercase">Recently Completed Requests</h2>
+        <h3 class="section-subheading text-muted">View the most recently completed clinical requests.</h3>
+    </div>
+
+    <div id="completedCarousel" class="carousel slide top-100" data-bs-ride="carousel">
+        <div class="carousel-inner ">
+            @foreach (var trending in @Model.CompletedResc)
+            {
+                <div class="carousel-item @(trending == Model.CompletedResc.First() ? "active" : "")">
+                    <div class="cards-wrapper" style="width:251px !important;">
+                        <div class="card">
+                            @{
+
+                                switch (trending.InsightCategory[0].ToLower())
+                                {
+                                    case "category insights":
+                                        <img src="~/assets/img/banners_CategoryInsight.png" class="card-img-top" alt="...">
+                                        break;
+                                    case "conversion insights":
+                                        <img src="~/assets/img/banners_ConversionInsight.png" class="card-img-top" alt="...">
+                                        break;
+                                    case "evidence insights":
+                                        <img src="~/assets/img/banners_EvidenceInsight.png" class="card-img-top" alt="...">
+                                        break;
+                                    case "physician insights":
+                                        <img src="~/assets/img/banners_PhysicianInsight.png" class="card-img-top" alt="...">
+                                        break;
+                                    case "product insights":
+                                        <img src="~/assets/img/banners_ProductInsight.png" class="card-img-top" alt="...">
+                                        break;
+                                    case "supply disruption":
+                                        <img src="~/assets/img/banners_SupplyDisruption.png" class="card-img-top" alt="...">
+                                        break;
+                                    case "toolkits and checklists":
+                                        <img src="~/assets/img/banners_Toolkits.png" class="card-img-top" alt="...">
+                                        break;
+                                    default:
+                                        <img src="~/assets/img/placeholder1.png" class="card-img-top" alt="...">
+                                        break;
+                                }
+                            }
+
+                            <div class="card-body pb-4">
+                                <h6 class="card-title" style="height:50px !important;">@trending.DocumentTitle</h6>                                
+                                <a target="_blank" href="@Html.Encode(trending.Link.Replace("HTPS–healthtrustknowledgeservices","HTPS-healthtrustknowledgeservices"))" class="btn btn-primary">Show More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        @* --- Carousel Navigator --- *@
+        <button class="carousel-control-prev" type="button" data-bs-target="#completedCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#completedCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+</section>
+
+

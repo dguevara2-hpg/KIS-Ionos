@@ -1,0 +1,268 @@
+﻿@model KIS_Core.Web.Models.HomeViewModel
+@{
+    ViewData["Title"] = "Web Portal";
+}
+
+<!-- Masthead-->
+
+<div style="background-color:#E2EBF2">
+    <div class="splitheader-row" style="padding-top:3rem; padding-bottom:5rem;">
+
+        @*Welcome*@
+        <div class="row">
+            <div class="col-12 text-center">
+                @{
+                    var welcome = (ViewBag.Welcome == "" ? "" : ", " + ViewBag.Welcome);
+                    var welcometitle = "Welcome to the HealthTrust Knowledge Portal" + welcome + " !";
+                }
+                <h2 style="color:black"> @welcometitle</h2>
+            </div>
+        </div>
+
+        @*Masterheads
+            When user Role = 2, 3 then show both cards, else show just 1
+        *@
+        <div class="row mt-5">   
+            <div class="col-1">&nbsp</div>
+
+            @{
+                var colLibrary = "col-10";
+                var colPhys = "col-5 hidden";
+                if ( ViewBag.User != null && ( ViewBag.User.roleID == 1 || ViewBag.User.roleID == 2) )
+                {
+                    // display both 
+                    colLibrary = "col-5";
+                    colPhys = "col-5";
+                }
+            }
+            <div class=@colLibrary>
+                <header class="splithead" style="border-left: solid; border-left-color: lightgray; border-top: solid; border-top-color: lightgray; background-color:white; padding-top:30px;">
+
+                    <div class="text-center" >
+                        <img src="~/Assets/img/Library_Icon.png" style="width:15%; padding-bottom:25px;" />
+                    </div>
+                    
+                    <div class="splithead-heading text-uppercase">EXPLORE THE LEARNING LIBRARY</div>
+                    <div class="splithead-subheading">
+                        <div class="text-center" style="margin-left:10%; margin-right:10%; ">
+                            Connect with the knowledge you need.
+                        </div>
+                    </div>
+            
+                    <br/>
+                    <span class="splithead-explore mt-2">
+                        <a href="@Url.Action("index","Library")" style="text-decoration:none !important; color:#1e345d !important;">
+                            EXPLORE <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </span>
+                    
+                    <div class="home-search input-group add-on">
+                        <input class="form-control" placeholder="Search by Keyword" id="library_global_srch_term" type="text">
+                        <div class="input-group-btn">
+                            <button id="btnLibraryGlobalSearch" class="btn btn-primary" type="submit" onclick="GlobalSearch('library')"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </header>
+            </div>
+            <div class=@colPhys>
+                <header class="splithead" style="border-left: solid; border-left-color: lightgray; border-top: solid; border-top-color: lightgray; background-color:white; padding-top:30px;">
+
+                    <div class="text-center">
+                        <img src="~/Assets/img/PA_Page_Icon.png" style="width:15%; padding-bottom:25px;" />
+                    </div>
+
+                    <div class="splithead-heading text-uppercase">BROWSE OUR PHYSICIAN ADVISOR PROFILES</div>
+                    <div class="splithead-subheading">
+                        <div class="text-center" style="margin-left:10%; margin-right:10%; ">
+                            Learn more about the Physicians who inform our strategy.
+                        </div>
+                    </div>
+
+                    <br/>
+                    <span class="splithead-explore mt-2">
+                        <a href="@Url.Action("index","Physicians")" style="text-decoration:none !important; color:#1e345d !important;">
+                            EXPLORE <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </span>
+
+                    <div class="home-search input-group add-on">
+                        <input class="form-control" placeholder="Search by Keyword" id="physician_global_srch_term" type="text">
+                        <div class="input-group-btn">
+                            <button id="btnPhysicianGlobalSearch" class="btn btn-primary" type="submit" onclick="GlobalSearch('physician')"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </header>
+            </div>
+            <div class="col-1">&nbsp</div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="container">
+
+    <main role="main" class="pb-3">
+
+        @* --- Trending Resources --- *@
+        @Html.Partial("_TrendingResources", @Model.Trending)
+
+        @* --- How Can We Help --- *@
+        <section class="page-section" id="howCanWeHelp">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">HOW CAN WE HELP</h2>
+                </div>
+                <div class="row justify-content-lg-center">
+                    <div class="col-lg-3 col-sm-6 mb-4">
+                        <!-- Ask a question-->
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" target="_blank" href="https://app.smartsheet.com/b/form/0d5a508cd8234c9987958dde5318cf93">
+                                <div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"></div>
+                                </div>
+                                <img class="img-fluid" src="~/Assets/img/button_ask_question.png" alt="..." />
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 mb-4">
+                        <!-- Network with peers -->
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" target="_blank" href="https://huddle.healthtrustpg.com">
+                                <div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"></div>
+                                </div>
+                                <img class="img-fluid" src="~/Assets/img/button_network.png" alt="..." />
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 mb-4">
+                        <!-- Innovative product -->
+                        <div class="portfolio-item">
+                            <a class="portfolio-link" target="_blank" href="https://members.healthtrustpg.com/Home">
+                                <div class="portfolio-hover">
+                                    <div class="portfolio-hover-content"></div>
+                                </div>
+                                <img class="img-fluid" src="~/Assets/img/button_innovative_product.png" alt="..." />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        @* --- At a Glance --- *@
+        <section class="page-section" id="atAGlance">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-heading text-uppercase">AT A GLANCE</h2>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-sm-6 mb-4">
+                        <!-- COL 1-->
+                        <div class="card card-raised bg-gradient h-100">
+                            <div class="card-body">
+                                <h4 class="overline">Most Viewed Documents</h4>
+                                <div class="list-group list-group-flush list-group-light">
+                                    <div class="list-group-item d-flex justify-content-between px-0">
+                                        <div class="caption font-monospace text-opacity-25"></div>
+                                        <div class="caption font-monospace text-opacity-25 ms-2">views</div>
+                                    </div>
+                                    @{ foreach (var viewed in @Model.MostViewed)
+                                        {
+                                            <div class="list-group-item d-flex justify-content-between px-0">
+                                                @viewed.Title
+                                                <div class="ms-2">@viewed.TotalViews</div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            @*
+                                <div class="card-footer p-0">
+                                    <div class="d-flex justify-content-end ripple-white px-3 py-2">
+                                        <div class="d-flex align-items-center p-2">
+                                            <div class="fst-button">Full Report</div>
+                                            <i class="material-icons icon-sm ms-1">chevron_right</i>
+                                        </div>
+                                    </div>
+                                </div>
+                            *@
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 mb-4">
+                        <!-- COL 2-->
+                        <div class="card card-raised bg-gradient h-100">
+                            <div class="card-body">
+                                <h4 class="overline">Recently Completed</h4>
+                                <div class="list-group list-group-flush list-group-light">
+                                    <div class="list-group-item d-flex justify-content-between px-0">
+                                        <div class="caption font-monospace text-opacity-25"></div>
+                                        @*<div class="caption font-monospace text-opacity-25 ms-2">Type</div>*@
+                                    </div>
+
+                                    @{ foreach (var completed in @Model.Completed.CompletedResc)
+                                        {
+                                            <div class="list-group-item d-flex justify-content-between px-0">
+                                                @completed.DocumentTitle
+                                                @*<div class="ms-2">@completed.ItemType</div>*@
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            @*
+                                <div class="card-footer p-0">
+                                    <div class="d-flex justify-content-end ripple-white px-3 py-2">
+                                        <div class="d-flex align-items-center p-2">
+                                            <div class="fst-button">Full Report</div>
+                                            <i class="material-icons icon-sm ms-1">chevron_right</i>
+                                        </div>
+                                    </div>
+                                </div>
+                            *@
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-6 mb-4">
+                        <!-- COL 3-->
+                        <div class="card card-raised bg-gradient h-100">
+                            <div class="card-body">
+                                <h4 class="overline">In Process</h4>
+                                <div class="list-group list-group-flush list-group-light">
+                                    <div class="list-group-item d-flex justify-content-between px-0">
+                                        <div class="caption font-monospace text-opacity-25"></div>
+                                        @*<div class="caption font-monospace text-opacity-25 ms-2">Type</div>*@
+                                    </div>
+                                    @{ foreach (var inprocess in @Model.InProcess)
+                                        {
+                                            <div class="list-group-item d-flex justify-content-between px-0">
+                                                @inprocess.DocumentName
+                                                @*<div class="ms-2">@completed.ItemType</div>*@
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            @*
+                                <div class="card-footer p-0">
+                                    <div class="d-flex justify-content-end ripple-white px-3 py-2">
+                                        <div class="d-flex align-items-center p-2">
+                                            <div class="fst-button">Full Report</div>
+                                            <i class="material-icons icon-sm ms-1">chevron_right</i>
+                                        </div>
+                                    </div>
+                                </div>
+                            *@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+</div>
+
+@Html.Partial("_feedback")
+@Html.Partial("_feedbackSearch")
+

@@ -1,0 +1,320 @@
+﻿@model KIS_Core.Web.Models.PhysicianAdvisorDetailViewModel
+
+<div>
+    
+    <div class="row physician-detail">
+
+        <div class="col-8">
+
+            <div class="row">
+                <div class="col-4" style="margin-left:20px">
+                    @{
+                        var hyperlink = ViewBag.PhysicianPath + Model.physicianAdvisor.Headshot; // + ViewBag.key;
+                    }
+
+                    <img src='@hyperlink' style="width:100%" />
+                </div>
+
+                <div class="col-7" style="padding:10px">
+                    <h4> <b>@Model.physicianAdvisor.DisplayName</b> </h4>
+                    <b>Credentials:</b>
+                    @{
+                        if (Model.physicianAdvisor.Credentials != null)
+                        {
+                            var elem = "";
+                            foreach (var sp in Model.physicianAdvisor.Credentials)
+                            {
+                                elem += sp + ", ";
+                            }
+                            if (elem.Contains(","))
+                            {
+                                elem = elem.Substring(0, elem.Length - 2);
+                            }
+                            <span>@elem</span>
+                        }
+                    }
+                    <br />
+                    <b>Specialty:</b>
+                    @{
+                        if (Model.physicianAdvisor.Specialty != null)
+                        {
+                            var elem = "";
+                            foreach (var sp in Model.physicianAdvisor.Specialty)
+                            {
+                                elem += sp + ", ";
+                            }
+                            if (elem.Contains(","))
+                            {
+                                elem = elem.Substring(0, elem.Length - 2);
+                            }
+                            <span>@elem</span>
+                        }
+                    }
+                    <br />
+                    <b>Sub-Specialty:</b>
+                    @{
+                        if (Model.physicianAdvisor.Subspecialty != null)
+                        {
+                            var elem = "";
+                            foreach (var sp in Model.physicianAdvisor.Subspecialty)
+                            {
+                                elem += sp + ", ";
+                            }
+                            if (elem.Contains(","))
+                            {
+                                elem = elem.Substring(0, elem.Length - 2);
+                            }
+                            <span>@elem</span>
+                        }
+                    }
+                    <br />
+                    <b>IDN:</b>
+                    @{
+                        if (Model.physicianAdvisor.IDN != null)
+                        {
+                            var elem = "";
+                            foreach (var sp in Model.physicianAdvisor.IDN)
+                            {
+                                elem += sp + ", ";
+                            }
+                            if (elem.Contains(","))
+                            {
+                                elem = elem.Substring(0, elem.Length - 2);
+                            }
+                            <span>@elem</span>
+                        }
+                    }
+                    <br />
+                    <b>Hospital Affiliation:</b>
+                    @{
+                        if (Model.physicianAdvisor.HospitalAffiliations != null)
+                        {
+                            var elem = "";
+                            foreach (var sp in Model.physicianAdvisor.HospitalAffiliations)
+                            {
+                                elem += sp + ", ";
+                            }
+                            if (elem.Contains(","))
+                            {
+                                elem = elem.Substring(0, elem.Length - 2);
+                            }
+                            <span>@elem</span>
+                        }
+                    }
+                    <br />
+                    <b>Facility Type:</b>
+                    @{
+                        if (Model.physicianAdvisor.FacilityType != null)
+                        {
+                            var elem = "";
+                            foreach (var sp in Model.physicianAdvisor.FacilityType)
+                            {
+                                elem += sp + ", ";
+                            }
+                            if (elem.Contains(","))
+                            {
+                                elem = elem.Substring(0, elem.Length - 2);
+                            }
+                            <span>@elem</span>
+                        }
+                    }
+                </div>
+
+            </div>
+
+            <div class="row mt-5 mb-5">
+                <div class="col-11 physician-bio" style="background-color:transparent; padding:10px; margin-left:20px; font-size:14px;">
+                    <b>Education:</b>
+                    <br />
+                    @{
+                        if (Model.physicianAdvisor.MedicalSchool != null)
+                        {
+                            var elem = "";
+                            foreach (var ms in Model.physicianAdvisor.MedicalSchool)
+                            {
+                                elem += ms + ", ";
+                            }
+                            if (elem.Contains(","))
+                            {
+                                elem = elem.Substring(0, elem.Length - 2);
+                            }
+                            <span>@elem</span>
+                        }
+                    }
+                    <br />
+                    <b>Residency:</b>
+                    <br />
+                    @{
+                        if (Model.physicianAdvisor.Residency != null)
+                        {
+                            var elem = "";
+                            foreach (var res in Model.physicianAdvisor.Residency)
+                            {
+                                elem += res + ", ";
+                            }
+                            if (elem.Contains(","))
+                            {
+                                elem = elem.Substring(0, elem.Length - 2);
+                            }
+                            <span>@elem</span>
+                        }
+                    }
+                    <br />
+                    <b>Fellowships:</b>
+                    <br />
+                    @{
+                        if (Model.physicianAdvisor.Fellowships != null)
+                        {
+                            var elem = "";
+                            foreach (var fel in Model.physicianAdvisor.Fellowships)
+                            {
+                                elem += fel + ", ";
+                            }
+                            if (elem.Contains(","))
+                            {
+                                elem = elem.Substring(0, elem.Length - 2);
+                            }
+                            <span>@elem</span>
+                        }
+                    }
+                    <br />
+
+                    <b>Board Certifications:</b>
+                    <br />
+                    @{
+                        if (Model.physicianAdvisor.BoardCertifications != null)
+                        {
+                            var elem = "";
+                            foreach (var bc in Model.physicianAdvisor.BoardCertifications)
+                            {
+                                elem += bc + ", ";
+                            }
+                            if (elem.Contains(","))
+                            {
+                                elem = elem.Substring(0, elem.Length - 2);
+                            }
+                            <span>@elem</span>
+                        }
+                    }
+                    <br />
+
+                    <b>Biography:</b>
+                    <br />
+                    @Model.physicianAdvisor.Biography
+                    <br />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-4">
+            <div style="background-color:#1e345d; margin:15px; color:white; border-radius: 25px 45px;min-height:600px; font-size:12px; ">
+                <div class="row">
+                    <div class="col-12 text-center mt-2">
+                        <h5>YTD Engagement:</h5>
+                    </div>
+                </div>
+
+                @*Opportunity Score*@
+                <div class="row">
+                    <div class="col-12 text-center mt-4">
+                        <h5>Opportunity Score</h5>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 text-center mt-1">
+                        <p>Number of responses relative to HealthTrust opportunities for Sourcing, product review and innovation strategies using a scale of 0-5.</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-1"></div>
+
+                    @{
+                        var BlankStars = 5 - Model.physicianEngagementScores.OpportunityScore;
+
+                        // Filled Stars
+                        for (var i = 0; i < Model.physicianEngagementScores.OpportunityScore; i++)
+                        {
+                            <div class="col-2">
+                                <span style="font-size: 1.5em; color:#F38A00;">
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        }
+
+                        // Outlined Stars
+                        for (var i = 0; i < BlankStars; i++)
+                        {
+                            <div class="col-2">
+                                <span style="font-size: 1.5em; color: white;">
+                                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        }
+
+                    }
+
+                    <div class="col-1"></div>
+                </div>
+
+                @*Engagement Value Score*@
+                <div class="row">
+                    <div class="col-12 text-center mt-4">
+                        <h5>Engagement Value Score</h5>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 text-center mt-1">
+                        <p>Level of engagement whitin HealthTrust including education, publications and speaking engagements using a scale of 0-10.</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center" style="font-size: 2.5em; font-weight:800">
+                        <span style="color: #F38A00;">
+                            @Model.physicianEngagementScores.WeightedScore
+                        </span>
+                        <span>
+                            /10
+                        </span>
+                    </div>
+                </div>
+
+                @*Combined Total*@
+                <div class="row">
+                    <div class="col-12 text-center mt-4">
+                        <h5>Combined Total</h5>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 text-center mt-1">
+                        <p>Average % of Opportunity Score and Engagement Value Score</p>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                    <div class="circle-wrap">
+                        @{
+                            var totalScorePercent = (@Model.physicianEngagementScores.TotalScorePercent == null) ? "0%" : @Model.physicianEngagementScores.TotalScorePercent;
+                            var totalPercent = totalScorePercent;
+                            totalPercent = totalPercent.Substring(0, totalScorePercent.Length - 1);
+                        }
+                        <div class="pie animate no-round" style="--p:@totalPercent;--c:#F38A00;">
+                            <div class="pie-inside">
+                                @totalScorePercent
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+

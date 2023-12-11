@@ -1,0 +1,215 @@
+﻿@model KIS_Core.Web.Models.TrendingResourceViewModel
+
+<section class="page-section mb-5" id="TrendingResources">
+
+    <div class="text-center">
+        <h2 class="section-heading text-uppercase">Trending Resources</h2>
+        <h3 class="section-subheading text-muted">View the top downloaded documents by your peers.</h3>
+    </div>
+
+    @* --- Carousel Tabs --- *@
+    <div class="custom-tab" id="custom-featured-tabs">
+
+        @* --- Pill Menu --- *@
+        <ul class="nav nav-tabs nav-justified" id="trending-tab" role="tablist">
+            <div class="slider"></div>
+
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="pills-featured-tab" data-bs-toggle="pill" data-bs-target="#pills-featured" type="button" role="tab" aria-controls="pills-featured" aria-selected="true">Featured</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="pills-supplychain-tab" data-bs-toggle="pill" data-bs-target="#pills-supplychain" type="button" role="tab" aria-controls="pills-supplychain" aria-selected="false">Product Insights</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="pills-member-tab" data-bs-toggle="pill" data-bs-target="#pills-member" type="button" role="tab" aria-controls="pills-member" aria-selected="false">Evidence Insights</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="pills-physician-tab" data-bs-toggle="pill" data-bs-target="#pills-physician" type="button" role="tab" aria-controls="pills-physician" aria-selected="false">Physician Insights</a>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="trending-tabContent">
+            <div class="tab-pane fade show active" id="pills-featured" role="tabpanel" aria-labelledby="pills-featured-tab">
+                @* --- Featured Resources Carousel -- *@
+                <div id="featuredCarousel" class="carousel slide top-100" data-bs-ride="carousel">
+                    <div class="carousel-inner ">
+                        @foreach (var trending in @Model.Featured)
+                        {
+                            <div class="carousel-item @(trending == Model.Featured.First() ? "active" : "")">
+                                <div class="cards-wrapper" style="width:251px !important;">
+                                    <div class="card">
+                                        <img src="~/Assets/img/banners_ConversionInsight.png" class="card-img-top" alt="...">
+                                        <div class="card-body pb-4">
+                                            <h6 class="card-title" style="height:50px !important;">@trending.DocumentTitle</h6>
+                                            @*<p class="card-text">@trending.InsightCategory</p>*@
+                                            @{
+                                                var hyperlink = ViewBag.DocumentPath + trending.Link + ViewBag.key;
+                                            }
+                                            @if (ViewBag.User == null)
+                                            {
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                                    View
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <a target="_blank" href="@hyperlink" class="btn btn-primary" onclick="ShowFeedback('@trending.Id', '@trending.DocumentTitle' )" >View</a>
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#featuredCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#featuredCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-supplychain" role="tabpanel" aria-labelledby="pills-supplychain-tab">
+
+                @* -- Product Insight Carousel --*@
+                @{
+
+                    if (@Model.Product is null)
+                    {
+                        <div class="justify-content-center">
+                            No Product Insight Resources
+                        </div>
+                    }
+                    else
+                    {
+                        <div id="supplyChainCarousel" class="carousel slide top-100" data-bs-ride="carousel">
+                            <div class="carousel-inner ">
+                                @foreach (var trending in @Model.Product)
+                                {
+                                    <div class="carousel-item @(trending == Model.Product.First() ? "active" : "")">
+                                        <div class="cards-wrapper" style="width:251px !important;">
+                                            <div class="card">
+                                                <img src="~/Assets/img/banners_ProductInsight.png" class="card-img-top" alt="...">
+                                                <div class="card-body pb-4">
+                                                    <h6 class="card-title" style="height:50px !important;">@trending.DocumentTitle</h6>
+                                                    @*<p class="card-text">@trending.InsightCategory</p>*@
+                                                    @{
+                                                        var hyperlink = ViewBag.DocumentPath + trending.Link + ViewBag.key;
+                                                    }
+                                                    <a target="_blank" href="@Html.Encode(hyperlink)" class="btn btn-primary">View</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#supplyChainCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#supplyChainCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    }
+                }
+            </div>
+            <div class="tab-pane fade" id="pills-member" role="tabpanel" aria-labelledby="pills-member-tab">
+                @* -- Evidence Insights Carousel -- *@
+                @{
+
+                    if (@Model.Evidence is null)
+                    {
+                        <div class="justify-content-center">
+                            No Evidence Insight Resources
+                        </div>
+                    }
+                    else
+                    {
+                        <div id="memberCarousel" class="carousel slide top-100" data-bs-ride="carousel">
+                            <div class="carousel-inner ">
+                                @foreach (var trending in @Model.Evidence)
+                                {
+                                    <div class="carousel-item @(trending == Model.Evidence.First() ? "active" : "")">
+                                        <div class="cards-wrapper" style="width:251px !important;">
+                                            <div class="card">
+                                                <img src="~/Assets/img/banners_EvidenceInsight.png" class="card-img-top" alt="...">
+                                                <div class="card-body pb-4">
+                                                    <h6 class="card-title" style="height:50px !important;">@trending.DocumentTitle</h6>
+                                                    @*<p class="card-text">@trending.InsightCategory</p>*@
+                                                    @{
+                                                        var hyperlink = ViewBag.DocumentPath + trending.Link + ViewBag.key;
+                                                    }
+                                                    <a target="_blank" href="@Html.Encode(hyperlink)" class="btn btn-primary">View</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#memberCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#memberCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    }
+                }
+            </div>
+            <div class="tab-pane fade" id="pills-physician" role="tabpanel" aria-labelledby="pills-physician-tab">
+                @* -- Physician Insights Carousel -- *@
+                @{
+                    if (@Model.Physician is null)
+                    {
+                        <div class="justify-content-center">
+                            No Physician Insight Resources
+                        </div>
+                    }
+                    else
+                    {
+                        <div id="physicianCarousel" class="carousel slide top-100" data-bs-ride="carousel">
+                            <div class="carousel-inner ">
+                                @foreach (var trending in @Model.Physician)
+                                {
+                                    <div class="carousel-item @(trending == Model.Physician.First() ? "active" : "")">
+                                        <div class="cards-wrapper" style="width:251px !important;">
+                                            <div class="card">
+                                                <img src="~/Assets/img/banners_PhysicianInsight.png" class="card-img-top" alt="...">
+                                                <div class="card-body pb-4">
+                                                    <h6 class="card-title" style="height:50px !important;">@trending.DocumentTitle</h6>
+                                                    @*<p class="card-text">@trending.InsightCategory</p>*@
+                                                    @{
+                                                        var hyperlink = ViewBag.DocumentPath + trending.Link + ViewBag.key;
+                                                    }
+                                                    <a target="_blank" href="@Html.Encode(hyperlink)" class="btn btn-primary">View</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#physicianCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#physicianCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+</section>
+
+

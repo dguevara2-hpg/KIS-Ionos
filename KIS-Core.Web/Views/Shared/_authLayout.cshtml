@@ -1,0 +1,264 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KIS - @ViewData["Title"]</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/custom.css" />
+
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
+    <link rel="shortcut icon" href="~/favicon.png" sizes="16x16">
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://kit.fontawesome.com/8c1ec763e0.js" crossorigin="anonymous"></script>
+    <script src="~/js/common.js" asp-append-version="true"></script>
+
+    <!-- Google Tag Manager -->
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-NG5PRGC');</script>
+    <!-- End Google Tag Manager -->
+</head>
+<body>
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NG5PRGC"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3D8MC97BL6"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-3D8MC97BL6');
+    </script>
+    <!-- Google tag (gtag.js) -->
+    <!-- Navigation-->
+
+
+    @*<div class="row">
+        <div class="col-12" style="background-color:navy; height:60px;">
+
+        </div>
+    </div>*@
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+        <div class="container-xxl">
+            <a class="navbar-brand" href="@Url.Action("Index", "Home")"><img src="~/Assets/img/HealthTrust_Logo_horiz.png" alt="..." /></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fas fa-bars ms-1"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
+                    <li class="nav-item active "><a class="nav-link" href="https://app.smartsheet.com/b/form/0d5a508cd8234c9987958dde5318cf93" target="_blank">New Request</a></li>
+                    <li class="nav-item">@Html.ActionLink("Learning Library", "Index", "Library", new { }, new { @class = "nav-link" }) </li>
+                    
+                    @if(ViewBag.User != null && (ViewBag.User.roleID == 1 || ViewBag.User.roleID == 2 ) )
+                    {
+                        <li class="nav-item">@Html.ActionLink("Physician Advisors", "Index", "Physicians", new { }, new { @class = "nav-link" }) </li>
+                    }                    
+                    
+                    <li class="nav-item">@Html.ActionLink("About", "About", "Home", new { }, new { @class = "nav-link" }) </li>
+                    @if (ViewBag.User == null)
+                    {
+                        <li class="nav-item">@Html.ActionLink("Login", "Login", "Accounts", new { }, new { @class = "nav-link" })  </li>
+                        <li class="nav-item">@Html.ActionLink("Request Access", "Signup", "Accounts", new { }, new { @class = "nav-link" }) </li>
+                    }
+                </ul>
+
+                <ul class="navbar-nav flex-row justify-content-end " style="padding-left: 75px; color: #0e396e">
+                    @*<li class="order-0">
+
+                            <div class="input-group add-on">
+                                <input class="form-control" placeholder="Search by Keyword" id="global_srch_term" type="text">
+                                <div class="input-group-btn">
+                                    <button id="btnGlobalSearch" class="btn btn-primary" type="submit" onclick="GlobalSearch()"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        
+                    </li>*@
+                    <li class="dropdown order-1">
+                        @*<form class="d-flex" role="search">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </form>*@
+
+                        @if (ViewBag.User == null)
+                        {
+                            @*<div>
+                                <a href="@Url.Action("Login", "Accounts", new { })" class="btn btn-secondary">Login</a>
+                                <a href="@Url.Action("SignUp", "Accounts", new { })" class="btn btn-primary">Request Access</a>
+                            </div>*@
+                        }
+                        else
+                        {
+                            <div class="dropdown">
+                                <button id="dropdownMenu1" type="button" data-bs-toggle="dropdown" class="btn  dropdown-toggle" style="color: #fff !important">
+                                    @*<span> @ViewBag.User.username</span>*@
+                                    <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end mt-3" aria-labelledby="dropdownMenuProfile">
+                                        <li>
+                                            <a class="dropdown-item" href="">
+                                                <i class="material-icons leading-icon">person</i>
+                                                <div class="me-3">@ViewBag.User.username</div>
+                                            </a>
+                                        </li>
+
+
+                                    @if (ViewBag.User.roleID == 1)
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" href="@Url.Action("AccessRequest","User")">
+                                                <i class="material-icons leading-icon">settings</i>
+                                                <div class="me-3">User Requests</div>
+                                            </a>
+                                        </li>
+                                    }
+
+                                    @*<li>
+                                            <a class="dropdown-item" href="#!">
+                                                <i class="material-icons leading-icon">person</i>
+                                                <div class="me-3">Profile</div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#!">
+                                                <i class="material-icons leading-icon">settings</i>
+                                                <div class="me-3">Settings</div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#!">
+                                                <i class="material-icons leading-icon">help</i>
+                                                <div class="me-3">Help</div>
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider" /></li>*@
+                                    <li>
+                                        @*@Html.ActionLink("Logout", "logout", "accounts", new { }, new { @class = "dropdown-item" })*@
+                                        <a class="dropdown-item" href="@Url.Action("Logout","Accounts")">
+                                            <i class="material-icons leading-icon">logout</i>
+                                            <div class="me-3">Logout</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    @RenderBody()
+
+    <section class="page-section" id="contact">
+        <div class="container" style="background-color:#1E345D; min-height:250px;">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-6">
+                    <div class="footer-info-single">
+                        <h2 class="title">ABOUT</h2>
+                        <ul class="list-unstyled">
+                            <li>@Html.ActionLink("About the team", "About", "Home", new { }, new { @class = "" }) </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-3 col-sm-6">
+                    <div class="footer-info-single">
+                        <h2 class="title">HEALTHTRUST RESOURCES</h2>
+                        <ul class="list-unstyled">
+                            <li><a href="https://members.healthtrustpg.com" target="_blank" title="">HealthTrust Member Portal</a></li>
+                            <li><a href="https://supplydisruption.healthtrustpg.com" target="_blank" title="">HealthTrust Supply Disruption Portal</a></li>
+                            <li><a href="https://huddle.healthtrustpg.com" target="_blank" title="">HealthTrust Huddle Community Network</a></li>
+                            <li><a href="https://members.healthtrustpg.com/customerservice" target="_blank" title="">HealthTrust Member Support</a></li>
+                            <li><a href="https://healthtrustpg.com/thesource" target="_blank" title="">The Source</a></li>
+                            <li><a href="https://healthtrustpg.com/healthtrust-innovation-center" target="_blank" title="">HealthTrust's Innovation Center</a></li>
+                            <li><a href="https://galencollege.edu" target="_blank" title="">Galen College of Nursing</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-3 col-sm-6">
+                    <div class="footer-info-single">
+                        <h2 class="title">TELL US HOW WE CAN HELP</h2>
+                        <ul class="list-unstyled">
+                            <li><a href="https://app.smartsheet.com/b/form/0d5a508cd8234c9987958dde5318cf93" target="_blank" title="">Ask a Question</a></li>
+                            <li class="text-white">Email Us: <a href="mailto:clinical.services@healthtrustpg.com?subject=HealthTrust Knowledge Insight Portal">clinical.services@healthtrustpg.com </a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <footer class="footer py-4">
+        <div class="container">
+            <div class="row align-items-center h-100">
+                <div class="col-lg-8 text-lg-start">Copyright &copy; 2023 Healthtrust | Knowledge Management Services | All rights reserved </div>
+                <div class="col-lg-4 text-lg-end">
+                    <a class="link-dark text-decoration-none me-3" href="#!">Privacy Policy</a>
+                    <a class="link-dark text-decoration-none" href="#!">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("scripts", required: false)
+
+
+
+    @* You are not logged in Modal *@
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    @*<h5 class="modal-title" id="exampleModalLabel">Page Title</h5>*@
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <br />
+                    <h5>Hello! Please Request Access or Login</h5>
+                    <br /><br />
+                    You must be logged in to access our insight documents.
+                    <br /><br />
+                </div>
+                <div class="text-center align-items-center">
+                    <a href="@Url.Action("Login", "Accounts", new { })" class="btn btn-primary">Login</a>
+                </div>
+                <br /><br />
+                <div class="modal-footer">
+                    <h8>Don't have an account?  <a href="@Url.Action("SignUp", "Accounts", new { })">Request Access.</a>  </h8>
+
+                    @*
+                        <a href="@Url.Action("Login", "Accounts", new { })" class="btn btn-secondary">Login</a>
+                        <a href="@Url.Action("SignUp", "Accounts", new { })" class="btn btn-primary">SignUp</a>
+                    *@
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>

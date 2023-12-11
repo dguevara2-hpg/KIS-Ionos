@@ -1,0 +1,189 @@
+﻿<style>
+
+    .feedback {
+        background-color: white !important;
+        min-height: 350px;
+        z-index: -1 !important;
+        width: 300px !important;
+    }
+
+    .feedback h4, h7 {
+        color:slategrey !important;
+    }
+
+    .feedback textarea {
+        resize: none;
+    }
+
+
+    .fw-500 {
+        font-weight: 500 !important;
+    }
+
+    .thumb {
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+        font-size: 19px;
+        border: 1px solid #bbb;
+        line-height: 37px;
+        display: inline-block;
+        cursor: pointer;
+        transition: all 0.5s;
+    }
+
+    .thumbs-up, .thumbs-down {
+        padding-left: 3px;
+    }
+
+    .thumbs-up:hover, .up.active_vote {
+        color: #fff;
+        background-color: #11b4ef;
+        border: 1px solid #11b4ef;
+    }
+
+    .thumbs-down:hover, .down.active_vote {
+        color: #fff;
+        background-color: #11b4ef;
+        border: 1px solid #11b4ef;
+    }
+
+    .sticky_button {
+        position: fixed;
+        bottom: -4px;
+        right: 10px;
+    }
+
+    .collapse-search-feedback {
+        background-color: #31B0D5;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 4px;
+        border-color: #46b8da;
+    }
+
+    .feedback_min {
+        border: none !important;
+        background: none !important;
+        margin-top: -8px !important;
+    }
+
+</style>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+
+    <div id="feedbackSearchToast" class="toast feedback" role="alert" aria-live="assertive" aria-atomic="true">
+        <div id="ToastHeader" class="toast-header sticky">
+            <strong class="me-auto">&nbsp;</strong>
+            <button type="button" class="feedback_min fa fa-window-minimize" onclick="MinimizeFeedbackSearch()" title="Minimize"></button>
+            <button type="button" class="btn-close btn-close" data-bs-dismiss="toast" aria-label="Close" onclick="CloseFeedbackSearch()" title="Close"></button>
+        </div>
+        <div class="toast-body">
+            <form id="feedback-form-search">                
+                <div class="row align-middle">
+                    <div class="col-12 text-center">
+                        <h4>Share your thoughts.</h4>
+                        <br />
+                        <h6>Did you find what you were looking for today?</h6>
+                    </div>
+
+                    <div class="row align-middle">
+                        <div class="col-12 text-center">
+                            <div class="row mb-3 mt-3 ">
+                                <div class="col-md-6">
+                                    <a id="vote_up-search" class="thumb thumbs-up up feedback-useful-search">
+                                        <i class="fa fa-thumbs-o-up"></i>
+                                    </a>
+                                    <small class="fw-500">Yes</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <a id="vote_down-search" class="thumb thumbs-down down feedback-useful-search">
+                                        <i class="fa fa-thumbs-o-down"></i>
+                                    </a>
+                                    <small class="fw-500">No</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 text-center mb-3">
+                        <h6>what were you looking for?</h6>
+                        <textarea name="area" cols="40" rows="5" class="feedback-improve-search" id="feedback-improve-search"></textarea>
+                        <br />
+                        <br />
+                        <button type="button" class="btn btn-primary" onclick="SubmitFeedbackSearch()">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+<div id="btnFeedbackSearch" class="sticky_button" style="display:none">
+    <button class="collapse-search-feedback" onclick="MaximizeFeedbackSearch()">My Search Feedback</button>
+</div>
+
+
+<script>
+
+    function MinimizeFeedbackSearch() {
+        $('#feedbackToast').hide();
+        $('#feedbackSearchToast').hide();
+        $('#btnFeedback').hide();
+        $('#btnFeedbackSearch').show();
+    }
+    function MaximizeFeedbackSearch() {
+        $('#feedbackToast').hide();
+        $('#feedbackSearchToast').show();
+
+        $('#btnFeedback').hide();
+        $('#btnFeedbackSearch').hide();
+    }
+    function ShowFeedbackSearch() {        
+        $('#feedbackSearchToast').show();
+        $('#feedbackToast').hide();
+    };
+    function CloseFeedbackSearch() {
+        $('#feedbackSearchToast').hide();
+        $('#feedbackToast').hide();
+    };
+    function SubmitFeedbackSearch() {
+        var helpful = "";
+        var feedback = "";
+
+        var feed_el = document.getElementsByClassName("feedback-useful-search");
+        for (var x = 0; x < feed_el.length; x++) {
+            if (feed_el[x].className.includes("active_vote")) {
+                helpful = feed_el[x].id;
+            }
+        };
+
+        var feedback = document.getElementsByClassName("feedback-improve-search")[0].value;
+        var selection = (helpful == "vote_up-search") ? "Yes" : "No";
+
+        var form = {selection: helpful, feedback: feedback };
+
+        $.ajax({
+            url: appPath + "/Feedback/FeedbackSearchClick",
+            type: "GET",
+            contentType: "application/json",
+            data: { selection: selection, feedback: feedback },  //{ formObj: form },
+            datatype: "json",
+            success: function (data) {
+            }
+        });
+
+        CloseFeedbackSearch();
+    };
+
+
+    $(document).ready(function () {
+        $(".thumb").click(function () {
+            $(".thumb").removeClass('active_vote');
+            $(this).toggleClass('active_vote');
+        });
+    });
+</script>
+

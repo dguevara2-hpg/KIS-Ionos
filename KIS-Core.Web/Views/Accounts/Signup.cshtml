@@ -1,0 +1,223 @@
+﻿@model KIS_Core.Web.Models.RegisterViewModel
+
+@{
+    ViewData["Title"] = "KM Library";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript" src="~/js/pages/signup.js"></script>
+
+<div class="registrationbanner" style="margin-top:150px">
+    <div class="row text-lg-start mb-lg-5 align-items-center">
+        <div class="col-lg-5">
+            <img class="card-img-left example-card-img-responsive" src="~/Assets/img/header-bg.jpg" style="width:100%" />
+        </div>
+        <div class="col-lg-6">
+            <div class="row row align-items-stretch mb-5 justify-content-center">
+                <div class="col-lg-8 offset-2">
+                    <div class="text-start">
+                        <h2 class="section-heading text-uppercase">Register</h2>
+                    </div>
+                    <br />
+                    <form id="singupForm" class="needs-validation">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-6">
+                                    First Name:
+                                    <input class="form-control" id="reg_firstname" type="text" onfocusout="ValidateLength(this)" placeholder="Your First Name *" required />
+                                    <div class="invalid-feedback">A First Name is required.</div>
+                                </div>
+                                <div class="col-6">
+                                    Last Name:
+                                    <input class="form-control" id="reg_lastname" type="text" onfocusout="ValidateLength(this)" placeholder="Your Last Name *" required />
+                                    <div class="invalid-feedback">A Last Name is required.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mt-1">
+                            <div class="row">
+                                <div class="col-6">
+                                    Facility/IDN:
+                                    <select class="form-control" id="reg_facilityidn" placeholder="Select Your facility/ IDN *" required>
+                                        @foreach (var x in Model.facilityIDNlist)
+                                        {
+                                            if (@x.FacilityName == "Your Facility/IDN")
+                                            {
+                                                <option value=@x.FacilityID disabled selected>@x.FacilityName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value=@x.FacilityID>@x.FacilityName</option>
+                                            }
+                                        }
+                                    </select>
+                                    <div class="invalid-feedback" data-sb-feedback="Facility/IDN:required">A Facility/IDN is required.</div>
+                                </div>
+                                <div class="col-6">
+                                    Job Title:
+                                    <input class="form-control" id="reg_jobtitle" type="text" onfocusout="ValidateLength(this)" placeholder="Your Job Title *" required />
+                                    <div class="invalid-feedback">A Job Title is required.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mt-1">
+                            Email:
+                            <input class="form-control" id="reg_email" type="email" onfocusout="ValidateLength(this)" placeholder="Your Work Email *" required />
+                            <div class="invalid-feedback">Please provide a valid Work Email.</div>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <input type="checkbox" id="cbkAccept" checked />
+                            I attest that I am authorized by HealthTrust to access the platform and will not share these documents outside of my own organization.
+                            <div class="invalid-feedback">Please attest to our condition.</div>
+                        </div>
+
+                        <div id="registerSuccess" style="display:none" class="alert alert-success mt-2" role="alert">
+                            Thank you for your submitting your request. Our team will review and send a note upon approval. Have any questions? Please email us:
+                            <a href='mailto:clinical.services@healthtrustpg.com ? subject = HealthTrust Knowledge Insight Portal'>clinical.services@healthtrustpg.com </a>
+                        </div>
+
+                        <div id="registerError" style="display:none" class="alert alert-danger" role="alert">
+                        </div>
+
+                        <div class="text-start mt-5">
+                            <button class="btn btn-primary btn-xl text-uppercase" onclick="Register(event)">
+                                Request Access
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*
+<script type="text/javascript">
+    $(document).ready(function () {
+        let _isRegistered = sessionStorage.getItem("isRegistered");
+        let _isRegisteredMessage = sessionStorage.getItem("isRegisteredMessage");
+        sessionStorage.setItem("isRegistered", "");
+        sessionStorage.setItem("isRegisteredMessage", "");
+
+        if (_isRegistered == "success") {
+            $('#registerSuccess').show();
+            $('#registerError').hide();
+        }
+        if (_isRegistered == "error") {
+            $('#registerError').show();
+            document.getElementById("registerError").innerHTML = _isRegisteredMessage;
+            $('#registerSuccess').hide();
+        }
+    });
+
+
+    function Register(event) {
+        debugger;
+
+        var isvalid = true;
+        var _fname = document.getElementById("reg_firstname").value;
+        var _lname = document.getElementById("reg_lastname").value;
+        var _facilityidn = $("#reg_facilityidn option:selected").text();
+        var _jobtitle = document.getElementById("reg_jobtitle").value;
+        var _email = document.getElementById("reg_email").value;
+        var _accept = $('#cbkAccept').is(":checked");
+
+        // validate
+        if (_fname == '') {
+            var fn = document.getElementById("reg_firstname");
+            fn.classList.remove("is-invalid");
+            fn.classList.add("is-invalid");
+            isvalid = false;
+        }
+        else {
+            var fn = document.getElementById("reg_firstname");
+            fn.classList.remove("is-invalid");
+        }
+        if (_lname == '') {
+            var fl = document.getElementById("reg_lastname");
+            fl.classList.remove("is-invalid");
+            fl.classList.add("is-invalid");
+            isvalid = false;
+        }
+        else {
+            var fl = document.getElementById("reg_lastname");
+            fl.classList.remove("is-invalid");
+        }
+        if (_facilityidn == "Your Facility/IDN") {
+            var fi = document.getElementById("reg_facilityidn");
+            fi.classList.remove("is-invalid");
+            fi.classList.add("is-invalid");
+            isvalid = false;
+        }
+        else {
+            var fi = document.getElementById("reg_facilityidn");
+            fi.classList.remove("is-invalid");
+        }
+        if (_jobtitle == '') {
+            var jt = document.getElementById("reg_jobtitle");
+            jt.classList.remove("is-invalid");
+            jt.classList.add("is-invalid");
+            isvalid = false;
+        }
+        else {
+            var jt = document.getElementById("reg_jobtitle");
+            jt.classList.remove("is-invalid");
+        }
+        if (_email == '') {
+            var em = document.getElementById("reg_email");
+            em.classList.remove("is-invalid");
+            em.classList.add("is-invalid");
+            isvalid = false;
+        }
+        else {
+            var em = document.getElementById("reg_email");
+            em.classList.remove("is-invalid");
+        }
+        if (_accept == false) {
+            var ac = document.getElementById("cbkAccept");
+            ac.classList.remove("is-invalid");
+            ac.classList.add("is-invalid");
+            isvalid = false;
+        }
+        else {
+            var ac = document.getElementById("cbkAccept");
+            ac.classList.remove("is-invalid");
+        }
+
+        if (isvalid) {
+
+            var _object = { firstName: _fname, lastName: _lname, facilityIDN: _facilityidn, jobTitle: _jobtitle, emailAddress: _email };
+
+            $.ajax({
+                type: "POST",
+                datatype: "json",
+                url: appPath + "/Accounts/PostSignup",                                
+                data: '{ loginModel: ' + JSON.stringify(_object) + '}',                
+                async: false,
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data.error == true) {
+                        sessionStorage.setItem("isRegistered", "error");
+                    }
+                    else {
+                        sessionStorage.setItem("isRegistered", "success");
+                    }
+                    sessionStorage.setItem("isRegisteredMessage", data.message);
+                }
+            });
+        };
+    };
+
+
+
+    function ValidateLength(el) {
+        if (el.value.length > 2) {
+            el.classList.remove("is-invalid");
+        }
+        else {
+            el.classList.add("is-invalid")
+        }
+    };
+
+</script>*@

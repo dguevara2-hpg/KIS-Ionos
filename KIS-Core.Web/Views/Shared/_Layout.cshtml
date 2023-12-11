@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KIS - @ViewData["Title"]</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/custom.css" />
+
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
+    <link rel="shortcut icon" href="~/favicon.png" sizes="16x16">
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://kit.fontawesome.com/8c1ec763e0.js" crossorigin="anonymous"></script>
+    <script src="~/js/common.js" asp-append-version="true"></script>
+
+    <!-- Google Tag Manager -->
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-NG5PRGC');</script>
+    <!-- End Google Tag Manager -->
+</head>
+
+<body>
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NG5PRGC"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3D8MC97BL6"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-3D8MC97BL6');
+    </script>
+    <!-- Google tag (gtag.js) -->
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+        <div>
+
+        </div>
+
+        <div class="container">
+            <a class="navbar-brand" href="@Url.Action("Index","Home")"><img src="~/Assets/img/HealthTrust_Logo_horiz.png" alt="..." /></a>
+        </div>
+    </nav>
+
+    @RenderBody()
+
+    <section class="page-section" id="contact">
+        <div class="container" style="background-color:#1E345D; min-height:250px;">
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-6">
+                    <div class="footer-info-single">
+                        <h2 class="title">ABOUT</h2>
+                        <ul class="list-unstyled">
+                            <li>@Html.ActionLink("About the team", "About", "Home", new { }, new { @class = "" }) </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-3 col-sm-6">
+                    <div class="footer-info-single">
+                        <h2 class="title">HEALTHTRUST RESOURCES</h2>
+                        <ul class="list-unstyled">
+                            <li><a href="https://members.healthtrustpg.com" target="_blank" title="">HealthTrust Member Portal</a></li>
+                            <li><a href="https://supplydisruption.healthtrustpg.com" target="_blank" title="">HealthTrust Supply Disruption Portal</a></li>
+                            <li><a href="https://huddle.healthtrustpg.com" target="_blank" title="">HealthTrust Huddle Community Network</a></li>
+                            <li><a href="https://members.healthtrustpg.com/customerservice" target="_blank" title="">HealthTrust Member Support</a></li>
+                            <li><a href="https://healthtrustpg.com/thesource" target="_blank" title="">The Source</a></li>
+                            <li><a href="https://healthtrustpg.com/healthtrust-innovation-center" target="_blank" title="">HealthTrust's Innovation Center</a></li>
+                            <li><a href="https://galencollege.edu" target="_blank" title="">Galen College of Nursing</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-3 col-sm-6">
+                    <div class="footer-info-single">
+                        <h2 class="title">TELL US HOW WE CAN HELP</h2>
+                        <ul class="list-unstyled">
+                            <li><a href="https://app.smartsheet.com/b/form/0d5a508cd8234c9987958dde5318cf93" target="_blank" title="">Ask a Question</a></li>
+                            <li class="text-white">Email Us: <a href="mailto:clinical.services@healthtrustpg.com?subject=HealthTrust Knowledge Insight Portal">clinical.services@healthtrustpg.com </a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <footer class="footer py-4">
+        <div class="container">
+            <div class="row align-items-center h-100">
+                <div class="col-lg-8 text-lg-start">Copyright &copy; 2023 Healthtrust | Knowledge Management Services | All rights reserved </div>
+                <div class="col-lg-4 text-lg-end">
+                    <a class="link-dark text-decoration-none me-3" href="#!">Privacy Policy</a>
+                    <a class="link-dark text-decoration-none" href="#!">Terms of Use</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("scripts", required: false)
+
+
+
+
+    @*<div class="modal fade" id="FeedbackModal">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit User</h4>
+                    <button type="button" style="color:white;" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="CloseUserUpdateToast()"></button>
+                </div>
+
+                <div id="FeedbackBody" class="modal-body"></div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="SaveFeedback()">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "About";
+}
+
+
+<!-- Masthead-->
+<div>
+    <div class="row splitheader-row">
+        <div class="col-12">
+            <header class="splithead" style="padding-top:6.5rem !important; padding-bottom:4.5rem !important;" >
+                <div class="splithead-heading text-uppercase">Clinical Knowledge Insights</div>
+                <div class="splithead-mainheading">
+                    Accessible Expertise.  Actionable Resources. Comprehensive Support.
+                </div>
+                <div class="splithead-subheading">
+                    Welcome to the Clinical Knowledge Insights Portal. All of the clinical resources you previously found on the Education site are now contained in the learning library.
+                </div>
+                @Html.ActionLink("ACCESS THE LEARNING LIBRARY", "Index", "Library", new { }, new { @class = "btn btn-primary btn-xl text-uppercase" })
+            </header>
+        </div>
+    </div>
+</div>
+
+
+<div>
+    <main role="main" class="pt-5 pb-5">
+        <div class="row text-center">
+            <div class="col-lg-4 col-sm-6 mb-4" style="padding:50px 100px 50px 100px;">
+                <span class="fa-stack fa-4x mb-5">
+                    <i class="fas fa-circle fa-stack-2x text-info"></i>
+                    <i class="fas fa-clipboard-list fa-stack-1x fa-inverse"></i>
+                </span>
+                <h4 class="my-3">Clinical Sourcing Strategy Experts</h4>
+                <p class="text-muted"> Clinical professionals to evaluate evidence and comparative effectiveness across clinically sensitive medical device contracts
+                </p>
+            </div>
+
+            <div class="col-lg-4 col-sm-6 mb-4" style="padding:50px 100px 50px 100px;">
+                <span class="fa-stack fa-4x mb-5">
+                    <i class="fas fa-circle fa-stack-2x text-info"></i>
+                    <i class="fas fa-stethoscope fa-stack-1x fa-inverse"></i>
+                </span>
+                <h4 class="my-3">Clinician Engagement Experts</h4>
+                <p class="text-muted"> Member engagement specialists to partner with and lift up member voice and connect member needs with solutions
+                </p>
+            </div>
+
+            <div class="col-lg-4 col-sm-6 mb-4" style="padding:50px 100px 50px 100px;">
+                <span class="fa-stack fa-4x mb-5">
+                    <i class="fas fa-circle fa-stack-2x text-info"></i>
+                    <i class="fas fa-head-side-virus fa-stack-1x fa-inverse"></i>
+                </span>
+                <h4 class="my-3">Knowledge Navigation Experts</h4>
+                <p class="text-muted"> Knowledge management leaders to organize, relate, and share collective knowledge to make it easier to connect you with what you need
+                </p>
+            </div>
+        </div>
+    </main>
+</div>
