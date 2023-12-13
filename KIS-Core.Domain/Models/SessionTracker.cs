@@ -12,6 +12,7 @@ namespace KIS_Core.Domain.Models
         public string FilterCount { get; set; }
         public string DocumentCount { get; set; }
         public string SearchCount { get; set; } 
+        public string PhysicianCount { get; set; }
         public int TotalCount
         {
             get
@@ -19,7 +20,7 @@ namespace KIS_Core.Domain.Models
                 var z = 0;
                 try
                 {
-                    z = int.Parse(FilterCount) + int.Parse(DocumentCount) + int.Parse(SearchCount);
+                    z = int.Parse(FilterCount) + int.Parse(DocumentCount) + int.Parse(SearchCount) + int.Parse(PhysicianCount);
                 }
                 catch { z = 0; }
                 return z;
@@ -33,6 +34,7 @@ namespace KIS_Core.Domain.Models
             FilterCount = "0";
             DocumentCount = "0";
             SearchCount = "0";
+            PhysicianCount = "0";
         }
         
         public void IncrementFilterCount()
@@ -53,12 +55,19 @@ namespace KIS_Core.Domain.Models
             x++;
             SearchCount = x.ToString();
         }
+        public void IncrementPhysicianCount()
+        {
+            var x = int.Parse(PhysicianCount);
+            x++;
+            PhysicianCount = x.ToString();
+        }
 
         public void ResetCount()
         {
             FilterCount = "0";
             DocumentCount = "0";
             SearchCount = "0";
+            PhysicianCount = "0";
         }
     }
 }

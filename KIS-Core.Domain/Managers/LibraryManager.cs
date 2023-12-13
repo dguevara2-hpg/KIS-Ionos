@@ -81,9 +81,7 @@ namespace KIS_Core.Domain.Managers
         }
 
         public List<KmLibrary> GetLibrary()
-        {
-            Logger.LogError("LibraryManager - " + "GetLibrary() - Start" );
-
+        {            
             List<KmLibrary> rtn = new List<KmLibrary>();
 
             try

@@ -317,8 +317,8 @@ namespace KIS_Core.Web.Controllers
                 string json = System.IO.File.ReadAllText(filePath);
                 rtn.BannerImages = JsonConvert.DeserializeObject<List<BannerImage>>(json);
 
-                // Keep track of document click count
-                mySession.IncrementDocumentCount();
+                // Keep track of physician click count
+                mySession.IncrementPhysicianCount();
                 CC.SetSessionTracker(_httpContextAccessor.HttpContext, mySession);
 
                 // total click count and reset if total is achieved
@@ -358,6 +358,8 @@ namespace KIS_Core.Web.Controllers
                 PhyAdv.physicianEngagementScores = PM.GetPhysicianEngagement(ID);
 
                 // Store Physician Click ()
+                mySession.IncrementPhysicianCount();
+                PhysicianClick(ID.ToString(), "DetailClick");
             }
             catch (Exception ex) 
             {
@@ -369,28 +371,28 @@ namespace KIS_Core.Web.Controllers
 
         public void PhysicianClick(string id, string value)
         {
-        //    CommonController CC = new CommonController();
+            CommonController CC = new CommonController();
 
-        //    // SESSION Components
-        //    var mySession = CC.GetSessionTracker(_httpContextAccessor.HttpContext);
+            // SESSION Components
+            var mySession = CC.GetSessionTracker(_httpContextAccessor.HttpContext);
 
-        //    // VALIDATE THE USER
-        //    var myUser = CC.GetSessionUser(_httpContextAccessor.HttpContext);
-        //    ViewBag.User = (myUser.guid == "") ? null : myUser;
-        //    UserName = myUser.username;
+            // VALIDATE THE USER
+            var myUser = CC.GetSessionUser(_httpContextAccessor.HttpContext);
+            ViewBag.User = (myUser.guid == "") ? null : myUser;
+            UserName = myUser.username;
 
-        //    // Write to database
-        //    if (value != "")
-        //    {
-        //        using (var lManager = new LibraryManager(DbConnection))
-        //        {
-        //            lManager.StoreDocumentClick(id, value, UserName);
-        //        }
+            // Write to database
+            if (value != "")
+            {
+                using (var lManager = new LibraryManager(DbConnection))
+                {
+                    lManager.StoreDocumentClick(id, value, UserName, mySession.Id, int.Parse(mySession.PhysicianCount), "Physician Advisor");
+                }
 
-        //        // Keep track of document click count
-        //        mySession.IncrementDocumentCount();
-        //        CC.SetSessionTracker(_httpContextAccessor.HttpContext, mySession);
-        //    }
+                // Keep track of document click count
+                mySession.IncrementDocumentCount();
+                CC.SetSessionTracker(_httpContextAccessor.HttpContext, mySession);
+            }
         }
 
     }
