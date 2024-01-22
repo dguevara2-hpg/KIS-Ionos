@@ -23,7 +23,6 @@ $(document).ready(function () {
 
 
 function sortTable(n) {
-    debugger;
   var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
     table = document.getElementById("AccessRequestTable");
     switching = true;

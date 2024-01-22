@@ -1,9 +1,11 @@
-﻿using Org.BouncyCastle.Bcpg;
+﻿using KIS_Core.Domain.Utilities;
+using Org.BouncyCastle.Bcpg;
 using Org.BouncyCastle.Bcpg.OpenPgp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -52,6 +54,21 @@ namespace KIS_Core.Domain.Models
             HospitalAffiliations = new List<string>();
             FacilityType = new List<string>();
         }
-
+        public PhysicianAdvisor(PhysicianAdvisorString advisor)
+        {
+            Id = advisor.Id;
+            PrimaryEmail = advisor.PrimaryEmail;
+            Credentials = Utils.DelimitedToList('|',advisor.Credentials);
+            Specialty = Utils.DelimitedToList('|', advisor.Specialty);
+            Subspecialty = Utils.DelimitedToList('|', advisor.Subspecialty);
+            //HealthSystem = Utils.DelimitedToList('|', advisor.HealthSystem);
+            HospitalAffiliations = Utils.DelimitedToList('|', advisor.HospitalAffiliations);
+            FacilityType = Utils.DelimitedToList('|', advisor.FacilityType);
+            //Education = Utils.DelimitedToList('|', advisor.Education);
+            Residency = Utils.DelimitedToList('|', advisor.Residency);
+            Fellowships = Utils.DelimitedToList('|', advisor.Fellowships);
+            BoardCertifications = Utils.DelimitedToList('|', advisor.BoardCertifications);
+            Biography = advisor.Biography.Trim();
+        }
     }
 }

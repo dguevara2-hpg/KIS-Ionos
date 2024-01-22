@@ -40,6 +40,7 @@ namespace KIS_Core.Web.Controllers
                 // VALIDATE THE USER
                 var myUser = CC.GetSessionUser(_httpContextAccessor.HttpContext);
                 ViewBag.User = (myUser.guid == "") ? null : myUser;
+                ViewBag.AnalyticsLink = _libraryConfig.AnalyticsLink;
                 UserName = myUser.username;
 
                 // Library document (JSON)
@@ -131,6 +132,7 @@ namespace KIS_Core.Web.Controllers
                 // VALIDATE THE USER
                 var myUser = CC.GetSessionUser(_httpContextAccessor.HttpContext);
                 ViewBag.User = (myUser.guid == "") ? null : myUser;
+                ViewBag.AnalyticsLink = _libraryConfig.AnalyticsLink;
                 UserName = myUser.username;
 
                 // Library document (JSON)
@@ -366,6 +368,7 @@ namespace KIS_Core.Web.Controllers
                 // VALIDATE THE USER
                 var myUser = CC.GetSessionUser(_httpContextAccessor.HttpContext);
                 ViewBag.User = (myUser.guid == "") ? null : myUser;
+                ViewBag.AnalyticsLink = _libraryConfig.AnalyticsLink;
                 UserName = myUser.username;
 
                 // Write to database

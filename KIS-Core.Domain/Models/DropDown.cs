@@ -7,6 +7,8 @@ namespace KIS_Core.Domain.Models
     {
         [DataMember(Name = "value")]
         [JsonProperty(PropertyName = "value")]
+        
+        public int id { get; set; }
         public string value { get; set; }
     }
 }

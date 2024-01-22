@@ -42,6 +42,7 @@ namespace KIS_Core.Web.Controllers
             // VALIDATE THE USER
             var myUser = CC.GetSessionUser(_httpContextAccessor.HttpContext);
             ViewBag.User = (myUser.guid == "") ? null : myUser;
+            ViewBag.AnalyticsLink = _libraryConfig.AnalyticsLink;
             UserName = myUser.username;            
 
             AccessRequestViewModel VM = new AccessRequestViewModel();
@@ -84,6 +85,7 @@ namespace KIS_Core.Web.Controllers
             // VALIDATE THE USER
             var myUser = CC.GetSessionUser(_httpContextAccessor.HttpContext);
             ViewBag.User = (myUser.guid == "") ? null : myUser;
+            ViewBag.AnalyticsLink = _libraryConfig.AnalyticsLink;
             UserName = myUser.username;
             // ---
 

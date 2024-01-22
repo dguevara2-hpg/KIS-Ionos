@@ -130,9 +130,25 @@
                                                 <div class="me-3">User Requests</div>
                                             </a>
                                         </li>
+                                        <li>
+                                            <a class="dropdown-item" href="@ViewBag.AnalyticsLink" target="_blank">
+                                                <i class="material-icons leading-icon">help</i>
+                                                <div class="me-3">Analytics Dashboard</div>
+                                            </a>
+                                        </li>
                                     }
+                                    @if (ViewBag.User.roleID == 5)
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" href="@Url.Action("PhysicianCard","Admin")">
+                                                <i class="material-icons leading-icon">assignment</i>
+                                                <div class="me-3">Update Profile</div>
+                                            </a>
+                                        </li>
+                                    }                                                                        
 
-                                    @*<li>
+                                    @*
+                                        <li>
                                             <a class="dropdown-item" href="#!">
                                                 <i class="material-icons leading-icon">person</i>
                                                 <div class="me-3">Profile</div>
@@ -150,9 +166,10 @@
                                                 <div class="me-3">Help</div>
                                             </a>
                                         </li>
-                                        <li><hr class="dropdown-divider" /></li>*@
-                                    <li>
-                                        @*@Html.ActionLink("Logout", "logout", "accounts", new { }, new { @class = "dropdown-item" })*@
+                                        <li><hr class="dropdown-divider" /></li>
+                                    *@
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>                                        
                                         <a class="dropdown-item" href="@Url.Action("Logout","Accounts")">
                                             <i class="material-icons leading-icon">logout</i>
                                             <div class="me-3">Logout</div>

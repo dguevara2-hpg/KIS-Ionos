@@ -1,0 +1,465 @@
+﻿@model KIS_Core.Web.Models.PhysicianAdvisorDetailViewModel
+
+@{
+    ViewData["Title"] = "Physician Card";
+}
+
+<!-- Include the plugin's CSS and JS: -->
+<link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" />
+<link href="~/lib/jquery-multiselect/jquery-multiselect.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="~/lib/jquery-multiselect/jquery-multiselect.js"></script>
+<script src="~/js/pages/physicianCard.js"></script>
+
+<style>
+    .contact-card-link{
+        color: white;
+        text-decoration: none;
+    }
+</style>
+
+@{
+    var contactFormStyle = (Model.DisableContactForm) ? "display:block" : "display:none";
+    var contactFormDisplay = (Model.DisableContactForm) ? "disabled" : "";
+
+    var profileFormStyle = (Model.DisableProfileForm) ? "display:block" : "display:none";
+    var profileFormDisplay = (Model.DisableProfileForm) ? "disabled" : "";
+}
+
+@*  Controls go here  *@
+<div id="ReportFilters" class="report-top-section">
+    <div style="height:50px; margin-top:120px;">
+    </div>
+</div>
+
+<div id="PhysicianUpdateToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" style="position:absolute; top: 0; right:20px">
+    <div id="ToastHeader" class="toast-header" style="background-color: #1C345D; color: white">
+        <strong class="me-auto">Success</strong>
+        @*<small class="text-muted">just now</small>*@
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close" onclick="CloseToast()"></button>
+    </div>
+    <div id="ToastBody" class="toast-body">
+    </div>
+</div>
+
+<div id="PhysicianCard" class="row m-lg-5">
+    <input type="hidden" id="hiddenPhysicianID" name="hiddenPhysicianID" value="@Model.physicianAdvisor.Id">
+
+    @*Left panel selection*@
+    <div class="col-lg-2 edit-contact-card" style="background-color:#0082CB; color:white; min-height:250px; padding-left:30px;  ">   
+        <div class="row mt-5" style="padding-top:50px">
+            <div class="col-lg-12">
+                <h5>
+                    <a href="#" onclick="EditProfileCard()" class="contact-card-link">
+                        <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                        Edit Profile Card
+                    </a>
+                </h5>
+            </div>
+        </div>        
+        <div class="row mt-3" style="padding-top:0px">
+            <div class="col-lg-12">
+                <h5>
+                    <a href="#" onclick="EditContactCard()" class="contact-card-link">
+                        <i class="fa fa-phone-square" aria-hidden="true"></i>
+                        Edit Contact
+                    </a>
+                </h5>
+            </div>
+        </div>
+    </div>
+
+
+    @*Edit Profile Card*@
+    <div class="col-lg-10" id="EditProfile" style="display:block">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Edit Profile Card</h3>
+            </div>
+
+            <div class="panel-body">
+
+                @* Profyle Card request already exists *@
+                <div id="profileCardAlertMessage" style="@profileFormStyle" class="alert alert-info" role="alert">
+                    Thank you for submitting your most recent request. A member from our team is currently reviewing and will contact you with any questions. Once the prior request is approved the user info card will be able to be edited again.
+                </div>
+
+                @*Profile Card*@
+                <form id="profileCardForm" class="needs-validation" style="padding-top:50px">
+                    <fieldset id="profileCardFieldset" @profileFormDisplay>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-6 pb-4">
+                                    <label for="lblCredentials" class="form-label">Credentials </label>
+                                    <select id="frmCredentials" multiple="multiple" class="active">
+                                        @foreach (var x in Model.ddlCredentials)
+                                        {
+                                            if (Model.physicianAdvisor.Credentials.Contains(x.value))
+                                            {
+                                                <option value="@x.value" selected>@x.value</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@x.value">@x.value</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-6 pb-4">
+                                    <label for="lblSpecialty" class="form-label">Specialty </label>
+                                    <select id="frmSpecialty" multiple="multiple" class="active">
+                                        @foreach (var x in Model.ddlSpecialties)
+                                        {
+                                            if (Model.physicianAdvisor.Specialty.Contains(x.value))
+                                            {
+                                                <option value="@x.value" selected>@x.value</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@x.value">@x.value</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-6 pb-4">
+                                    <label for="lblSubSpecialty" class="form-label">SubSpecialty </label>
+                                    <select id="frmSubSpecialty" multiple="multiple" class="active">
+                                        @foreach (var x in Model.ddlSubSpecialties)
+                                        {
+                                            if (Model.physicianAdvisor.Subspecialty.Contains(x.value))
+                                            {
+                                                <option value="@x.value" selected>@x.value</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@x.value">@x.value</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-6 pb-4">
+                                    <label for="lblHealthSystem" class="form-label">Health System</label>
+                                    <select id="frmHealthSystem" multiple="multiple" class="active">
+                                        @*   @foreach (var x in Model)
+                                        {
+                                        if (Model.physicianAdvisor.Credentials.Contains(x.value))
+                                        {
+                                        <option value="@x.value" selected>@x.value</option>
+                                        }
+                                        else
+                                        {
+                                        <option value="@x.value">@x.value</option>
+                                        }
+                                        }*@
+                                    </select>
+                                </div>
+                                <div class="col-6 pb-4">
+                                    <label for="lblHospitalAffiliations" class="form-label">Hospital Affiliations</label>
+                                    <select id="frmHospitalAffiliations" multiple="multiple" class="active">
+                                        @foreach (var x in Model.physicianAdvisor.HospitalAffiliations)
+                                        {
+                                            <option value="@x" selected>@x</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-6 pb-4">
+                                    <label for="lblFacilityType" class="form-label">Facility Type</label>
+                                    <select id="frmFacilityType" multiple="multiple" class="active">
+                                        @foreach (var x in Model.ddlFacilityTypes)
+                                        {
+                                            if (Model.physicianAdvisor.FacilityType.Contains(x.value))
+                                            {
+                                                <option value="@x.value" selected>@x.value</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@x.value">@x.value</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-6 pb-4">
+                                    <label for="lblEducation" class="form-label">Education</label>
+                                    <select id="frmEducation" multiple="multiple" class="active">
+                                        @foreach (var x in Model.physicianAdvisor.MedicalSchool)
+                                        {
+                                            <option value="@x" selected>@x</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-6 pb-4">
+                                    <label for="lblResidency" class="form-label">Residency</label>
+                                    <select id="frmResidency" multiple="multiple" class="active">
+                                        @foreach (var x in Model.physicianAdvisor.Residency)
+                                        {
+                                            <option value="@x" selected>@x</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-6 pb-4">
+                                    <label for="lblFellowship" class="form-label">Fellowship</label>
+                                    <select id="frmFellowship" multiple="multiple" class="active">
+                                        @foreach (var x in Model.physicianAdvisor.Fellowships)
+                                        {
+                                            <option value="@x" selected>@x</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-6 pb-4">
+                                    <label for="lblBoardCertifications" class="form-label">Board Certifications</label>
+                                    <select id="frmBoardCertifications" multiple="multiple" class="active">
+                                        @foreach (var x in Model.ddlBoardCertifications)
+                                        {
+                                            if (Model.physicianAdvisor.BoardCertifications.Contains(x.value))
+                                            {
+                                                <option value="@x.value" selected>@x.value</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@x.value">@x.value</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-6 pb-4">
+                                    <label for="lblBiography" class="form-label">Biography</label>
+                                    <textarea id="frmBiography" name="biography" rows="10" cols="200">
+                                        @Model.physicianAdvisor.Biography
+                            </textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+                @*Profile History*@
+@*
+                <div class="row mt-5" style="font-size:small">
+                    <h5>Previous Activity</h5>
+                    <div class="col-12 justify-content-lg-center text-center">
+                        @if (Model.RequestActivity.Count > 0)
+                        {
+                            <table id="UserRequestActivityTable" class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Role</th>
+                                        <th scope="col">Request Status</th>
+                                        <th scope="col">Email Type</th>
+                                        <th scope="col">User</th>
+                                        <th scope="col">Notes</th>
+                                        <th scope="col">Timestamp</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var act in Model.RequestActivity)
+                                {
+                                <tr data-id="@act.ActivityID">
+                                <td>@act.RoleName</td>
+                                <td>@act.RequestStatusName</td>
+                                <td>@act.EmailType</td>
+                                <td>@act.UserName</td>
+                                <td>@act.InternalNote</td>
+                                <td>@act.ActivityDate</td>
+                                </tr>
+
+                                }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <span>No Activity Data</span>
+                        }
+
+                    </div>
+                </div>
+*@
+                @*Profile Buttons*@
+                <div class="form-group">
+                    <div class="row mt-5">
+                        <div class="col-12 text-center">
+                            <fieldset id="profileCardFieldset" @contactFormDisplay>
+                                <button type="button" class="btn btn-default">Cancel</button>
+                                <button type="button" class="btn btn-primary" onclick="SavePhysicianProfile()">Save</button>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Edit Contact Card*@
+    <div class="col-lg-10" id="EditContact" style="display:none">
+        <div class="panel panel-default"> 
+            <div class="panel-heading">
+                <h3 class="panel-title">Edit Contact Card</h3>
+            </div>
+            <div class="panel-body">
+                @* Contact Request already exist message *@                
+                <div id="contactCardAlertMessage" style="@contactFormStyle" class="alert alert-info" role="alert">
+                    Thank you for submitting your most recent request. A member from our team is currently reviewing and will contact you with any questions. Once the prior request is approved the user info card will be able to be edited again.
+                </div>                                            
+
+                @* Contact Card *@
+                <form id="contactCardForm" class="needs-validation" style="padding-top:50px">
+                    <fieldset id="contactCardFieldset" @contactFormDisplay >
+                        <div class="form-group">
+                        <div class="row">
+                            <div class="col-6 pb-4">
+                                <label for="lblFirstName" class="form-label">First Name </label>
+                                <input class="form-control" id="card_firstname" type="text" onfocusout="ValidateLength(this)" value="@Model.physicianAdvisor.PhysicianFirstName" placeholder="First Name *" required />
+                                <div class="invalid-feedback">A First Name is required.</div>
+                            </div>
+                            <div class="col-6 pb-4">
+                                <label for="lblLastName" class="form-label">Last Name </label>
+                                <input class="form-control" id="card_lastname" type="text" onfocusout="ValidateLength(this)" value="@Model.physicianAdvisor.PhysicianLastName" placeholder="Last Name *" required />
+                                <div class="invalid-feedback">A Last Name is required.</div>
+                            </div>
+                            <div class="col-6 pb-4">
+                                <label for="lblNpi" class="form-label">NPI </label>
+                                <input class="form-control" id="card_npi" type="text" onfocusout="ValidateLength(this)" value="@Model.physicianAdvisor.NPI" placeholder="NPI"  />                                
+                            </div>
+                            <div class="col-6 pb-4">
+                                <label for="lblMailingAddress" class="form-label">Mailing Address </label>
+                                <input class="form-control" id="card_mailingaddress" type="text" onfocusout="ValidateLength(this)" value="@Model.physicianAdvisor.BillingAddress" placeholder="Mailing Address *" required />
+                                <div class="invalid-feedback">A Mailing Address is required.</div>
+                            </div>
+                            <div class="col-6 pb-4">
+                                <label for="lblPrimaryEmail" class="form-label">Primary Email </label>
+                                <input class="form-control" id="card_primaryemail" type="text" onfocusout="ValidateLength(this)" value="@Model.physicianAdvisor.PrimaryEmail" placeholder="Primary Email *" required />
+                                <div class="invalid-feedback">A Primary Email is required.</div>
+                            </div>
+                            <div class="col-6 pb-4">
+                                <label for="lblSecondaryEmail" class="form-label">Secondary Email </label>
+                                <input class="form-control" id="card_secondaryemail" type="text" onfocusout="ValidateLength(this)" value="@Model.physicianAdvisor.SecondaryEmail" placeholder="Secondary Email" />                                
+                            </div>
+
+                            @*<div class="col-6 pb-4">
+                                <label for="lblSpecialInterest" class="form-label">Special Interest </label>
+                                <select id="card_specialinterest" multiple="multiple" class="active">
+                                    @foreach (var x in Model.ddlSpecialInterests)
+                                    {
+                                        if (Model.physicianAdvisor.spe.Contains(x.value))
+                                        {
+                                            <option value="@x.value" selected>@x.value</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@x.value">@x.value</option>
+                                        }
+                                    }
+                                </select>
+                            </div>*@
+
+                        </div>
+                    </div>
+                    </fieldset>
+                </form>                              
+                @* Contact Buttons*@
+                <div class="form-group">
+                    <div class="row mt-5">
+                        <div class="col-12 text-center">
+                            <fieldset id="contactCardBtnFieldset" @contactFormDisplay >
+                                <button type="button" class="btn btn-default">Cancel</button>
+                                <button type="button" class="btn btn-primary" onclick="SaveContactProfile()">Save</button>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(function () {        
+        $('#frmCredentials').multiselect({
+            placeholder: 'Select Credentials',
+            search: true,
+            searchOptions: {
+                'default': 'Search Credentials'
+            }
+        });
+        $('#frmSpecialty').multiselect({
+            //columns: 3,
+            placeholder: 'Select Specialty',
+            search: true,
+            searchOptions: {
+                'default': 'Search Specialties'
+            }            
+        });                
+        $('#frmSubSpecialty').multiselect({
+            placeholder: 'Select SubSpecialty',
+            search: true,
+            searchOptions: {
+                'default': 'Search SubSpecialty'
+            }
+        });
+        $('#frmHealthSystem').multiselect({
+            placeholder: 'Select Health System',
+            search: true,
+            searchOptions: {
+                'default': 'Search Health System'
+            }
+        });
+        $('#frmHospitalAffiliations').multiselect({
+            placeholder: 'Select Hospital Affiliations',
+            search: true,
+            searchOptions: {
+                'default': 'Search Hospital Affiliations'
+            }
+        });
+        $('#frmFacilityType').multiselect({
+            placeholder: 'Select Facility Type',
+            search: true,
+            searchOptions: {
+                'default': 'Search Facility Type'
+            }
+        });
+        $('#frmEducation').multiselect({
+            placeholder: 'Select Education',
+            search: false            
+        });
+        $('#frmResidency').multiselect({
+            placeholder: 'Select Residency',
+            search: true,
+            searchOptions: {
+                'default': 'Search Residency'
+            }
+        });
+        $('#frmFellowship').multiselect({
+            placeholder: 'Select Fellowship',
+            search: true,
+            searchOptions: {
+                'default': 'Search Fellowship'
+            }
+        });
+        $('#frmBoardCertifications').multiselect({
+            placeholder: 'Select Board Certification',
+            search: true,
+            searchOptions: {
+                'default': 'Search Board Certification'
+            }
+        });
+        $('#card_specialinterest').multiselect({
+            placeholder: 'Select Special Interests',
+            search: true,
+            searchOptions: {
+                'default': 'Search Special Interests'
+            }
+        });        
+    });
+
+    function EditProfileCard(){
+        $("#EditProfile").show();
+        $("#EditContact").hide();
+    };
+
+    function EditContactCard() {
+        $("#EditContact").show();
+        $("#EditProfile").hide();
+    };
+
+</script>

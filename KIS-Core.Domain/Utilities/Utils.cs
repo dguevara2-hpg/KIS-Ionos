@@ -12,15 +12,18 @@ namespace KIS_Core.Domain.Utilities
         public static List<string> DelimitedToList(char delimit, string input)
         {
             var rtn = new List<string>();
-
+            
             try
             {
-                var _list = input.Split(delimit);
-
-                foreach (var _item in _list)
+                if(input != null)
                 {
-                    if (_item.Trim().Length > 0) { rtn.Add(_item.Trim()); }
-                }
+                    var _list = input.Split(delimit);
+
+                    foreach (var _item in _list)
+                    {
+                        if (_item.Trim().Length > 0) { rtn.Add(_item.Trim()); }
+                    }
+                }                
             }
             catch (Exception ex) { }
 
@@ -40,6 +43,36 @@ namespace KIS_Core.Domain.Utilities
                 }
             }
             catch (Exception ex) { }
+
+            return rtn;
+        }
+
+        public static string ListToDelimited(char delimit, List<string>input)
+        {
+            var rtn = "";
+
+            if ( input.Count > 0)
+            {
+                foreach (var _item in input)
+                {
+                    rtn += _item.Trim() + delimit.ToString();
+                }
+                
+                rtn = (rtn.Length > 0) ? rtn.Substring(0,rtn.Length - 1)  : "";
+            }
+
+            return rtn;
+        }
+
+        public static List<string> SortList(List<string> list)
+        {
+            List<string> rtn = new List<string>();
+
+            if (list != null)
+            {
+                var _sorted = list.OrderBy(n => n);
+                rtn.AddRange(_sorted);
+            }
 
             return rtn;
         }

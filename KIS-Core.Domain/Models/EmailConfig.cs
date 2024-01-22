@@ -20,5 +20,8 @@
         public string TeamNotificationEmail { get; set; } = string.Empty;        
         public string TeamNotificationEmail_Name { get; set; } = string.Empty;
         public string EmailTemplates { get; set; } = string.Empty;
+        public string PhysicianUpdateRequestPath { get; set; } = string.Empty;
+        public string PhysicianUpdateRequestEmail { get; set;} = string.Empty;
+        public string PhysicianUpdateRequestSubject { get; set; } = string.Empty;
     }
 }

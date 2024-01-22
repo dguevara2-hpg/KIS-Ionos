@@ -45,6 +45,7 @@ namespace KIS_Core.Web.Controllers
             // VALIDATE THE USER
             var myUser = CC.GetSessionUser(_httpContextAccessor.HttpContext);
             ViewBag.User = (myUser.guid == "") ? null : myUser;
+            ViewBag.AnalyticsLink = _libraryConfig.AnalyticsLink;
             UserName = myUser.username;
             ViewBag.Welcome = myUser.firstName;
 
@@ -110,6 +111,7 @@ namespace KIS_Core.Web.Controllers
             // ---
 
             ViewBag.DocumentPath = _libraryConfig.DocumentPath;
+            ViewBag.AnalyticsLink = _libraryConfig.AnalyticsLink;
             ViewBag.key = _libraryConfig.key;
 
             return View();

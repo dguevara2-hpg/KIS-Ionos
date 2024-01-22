@@ -3,6 +3,7 @@ using KIS_Core.Domain.Models;
 using KIS_Core.Web.Models;
 using Newtonsoft.Json;
 using KIS_Core.Domain;
+using System.Text;
 
 namespace KIS_Core.Web.Common
 {
@@ -143,7 +144,25 @@ namespace KIS_Core.Web.Common
 
             return body;            
         }
+        public StringBuilder ReadBodyFromTemplate(EmailConfig _emailConfig)
+        {
+            var body = new StringBuilder();
 
+            try
+            {
+                using (StreamReader reader = new StreamReader(_emailConfig.EmailTemplates + _emailConfig.PhysicianUpdateRequestPath))
+                {
+                    body.Append(reader.ReadToEnd());
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("CommonController - " + "FormatBodyFromTemplate() - " + ex.ToString());
+            }
+
+
+            return body;
+        }
         #endregion
 
 

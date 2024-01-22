@@ -16,9 +16,7 @@
 });
 
 
-function Register(event) {
-    debugger;
-
+function Register(event) {    
     var isvalid = true;
     var _fname = document.getElementById("reg_firstname").value;
     var _lname = document.getElementById("reg_lastname").value;

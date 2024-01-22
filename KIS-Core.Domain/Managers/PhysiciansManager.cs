@@ -3,10 +3,8 @@ using KIS_Core.Domain.Utilities;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
+using System.Xml.Linq;
 
 namespace KIS_Core.Domain.Managers
 {
@@ -141,6 +139,67 @@ namespace KIS_Core.Domain.Managers
             return rtn;
         }
 
+        public PhysicianAdvisor GetPhysicianDetails(string EmailAddress)
+        {            
+            var rtn = new PhysicianAdvisor();
+            var spName = "sp_GetPhysicianAdvisorDetails";
+
+            try
+            {
+                DbConnection.Open();
+                using (SqlCommand command = new SqlCommand(spName, DbConnection))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("ID", 0);
+                    command.Parameters.AddWithValue("EmailAddress", EmailAddress);
+
+                    using (var rdr = command.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            rtn = new PhysicianAdvisor()
+                            {
+                                Id = int.Parse(rdr["Id"].ToString()),
+                                IDN = Utils.DelimitedToList('|', rdr["HealthSystem"].ToString()),
+                                PhysicianLastName = rdr["PhysicianLastName"].ToString(),
+                                PhysicianFirstName = rdr["PhysicianFirstName"].ToString(),
+                                Specialty = Utils.DelimitedToList('|', rdr["Specialty"].ToString()),
+                                Subspecialty = Utils.DelimitedToList('|', rdr["Subspecialty"].ToString()),
+                                MedicalSchool = Utils.DelimitedToList('|', rdr["MedicalSchool"].ToString()),
+                                Residency = Utils.DelimitedToList('|', rdr["Residency"].ToString()),
+                                Fellowships = Utils.DelimitedToList('|', rdr["Fellowships"].ToString()),
+                                BoardCertifications = Utils.DelimitedToList('|', rdr["BoardCertifications"].ToString()),
+                                Credentials = Utils.DelimitedToList('|', rdr["Credentials"].ToString()),
+                                HospitalAffiliations = Utils.DelimitedToList('|', rdr["HospitalAffiliations"].ToString()),
+                                Biography = rdr["Biography"].ToString(),
+                                FacilityType = Utils.DelimitedToList('|', rdr["FacilityType"].ToString()),
+                                NPI = rdr["Npi"].ToString(),
+                                HourlyRate = rdr["HourlyRate"].ToString(),
+                                TravelRate = rdr["TravelRate"].ToString(),
+                                BillingAddress = rdr["BillingAddress"].ToString(),
+                                VendorNumber = rdr["VendorNumber"].ToString(),
+                                InternalTags = rdr["InternalTags"].ToString(),
+                                SpeakerRating = rdr["SpeakerRating"].ToString(),
+                                Cv = rdr["Cv"].ToString(),
+                                Headshot = rdr["Headshot"].ToString(),
+                                PrimaryEmail = rdr["PrimaryEmail"].ToString(),
+                                SecondaryEmail = rdr["SecondaryEmail"].ToString()
+                            };
+                        }
+                    }
+                }
+                DbConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                // log
+                Logger.LogError("PhysiciansManager - " + "GetPhysicianDetails() - " + ex.ToString());
+                throw ex;
+            }
+
+            return rtn;
+        }
+
         public PhysicianEngagementScores GetPhysicianEngagement(int ID)
         {
             var rtn = new PhysicianEngagementScores();
@@ -191,6 +250,293 @@ namespace KIS_Core.Domain.Managers
             return rtn;
         }
 
+        public bool IsContactFormDisabled(string _emailAddress, string _type)
+        {
+            bool rtn = false;
+            var spName = "sp_GetContactFormDisabled";
+
+            try
+            {
+                DbConnection.Open();
+                using (SqlCommand command = new SqlCommand(spName, DbConnection))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("EmailAddress", _emailAddress);
+                    command.Parameters.AddWithValue("RequestType", _type);
+                    command.Parameters.Add("@Count", SqlDbType.Int).Direction = ParameterDirection.Output;
+
+                    command.ExecuteNonQuery();
+
+                    var rowCount = Convert.ToInt32(command.Parameters["@Count"].Value);
+                                
+                    rtn = rowCount > 0;
+                }
+                DbConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                // log
+                Logger.LogError("PhysiciansManager - " + "IsContactFormDisabled() - " + ex.ToString());
+                throw ex;
+            }
+
+            return rtn;
+        }
+
+        public List<DropDown> GetAllCredentials()
+        {
+            var rtn = new List<DropDown>();
+            var spName = "sp_GetAllCredentials";
+            try
+            {
+                DbConnection.Open();
+                using (SqlCommand command = new SqlCommand(spName, DbConnection))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    using (var rdr = command.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            var dropD = new DropDown()
+                            {
+                                id = int.Parse(rdr["ID"].ToString()),
+                                value = rdr["Value"].ToString()
+                            };
+                            rtn.Add(dropD);
+                        }
+                    }
+                }
+                DbConnection.Close();
+            }
+            catch(Exception ex)
+            {
+                // log
+                Logger.LogError("PhysiciansManager - " + "GetAllCredentials() - " + ex.ToString());
+                throw ex;
+            }
+
+            return rtn;
+        }
+
+        public List<DropDown> GetAllSpecialties()
+        {
+            var rtn = new List<DropDown>();
+            var spName = "sp_GetAllSpecialties";
+            try
+            {
+                DbConnection.Open();
+                using (SqlCommand command = new SqlCommand(spName, DbConnection))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    using (var rdr = command.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            var dropD = new DropDown()
+                            {
+                                id = int.Parse(rdr["ID"].ToString()),
+                                value = rdr["Value"].ToString()
+                            };
+                            rtn.Add(dropD);
+                        }
+                    }
+                }
+                DbConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                // log
+                Logger.LogError("PhysiciansManager - " + "GetAllSpecialties() - " + ex.ToString());
+                throw ex;
+            }
+
+            return rtn;
+        }
+
+        public List<DropDown> GetAllSubSpecialties()
+        {
+            var rtn = new List<DropDown>();
+            var spName = "sp_GetAllSubSpecialties";
+            try
+            {
+                DbConnection.Open();
+                using (SqlCommand command = new SqlCommand(spName, DbConnection))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    using (var rdr = command.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            var dropD = new DropDown()
+                            {
+                                id = int.Parse(rdr["ID"].ToString()),
+                                value = rdr["Value"].ToString()
+                            };
+                            rtn.Add(dropD);
+                        }
+                    }
+                }
+                DbConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                // log
+                Logger.LogError("PhysiciansManager - " + "GetAllSubSpecialties() - " + ex.ToString());
+                throw ex;
+            }
+
+            return rtn;
+        }
+
+        public List<DropDown> GetAllHealthSystems()
+        {
+            var rtn = new List<DropDown>();
+            var spName = "sp_GetAllHealthSystems";
+            try
+            {
+                DbConnection.Open();
+                using (SqlCommand command = new SqlCommand(spName, DbConnection))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    using (var rdr = command.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            var dropD = new DropDown()
+                            {
+                                id = int.Parse(rdr["ID"].ToString()),
+                                value = rdr["Value"].ToString()
+                            };
+                            rtn.Add(dropD);
+                        }
+                    }
+                }
+                DbConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                // log
+                Logger.LogError("PhysiciansManager - " + "GetAllHealthSystems() - " + ex.ToString());
+                throw ex;
+            }
+
+            return rtn;
+        }        
+
+        public List<DropDown> GetAllFacilityTypes()
+        {
+            var rtn = new List<DropDown>();
+            var spName = "sp_GetAllFacilityTypes";
+            try
+            {
+                DbConnection.Open();
+                using (SqlCommand command = new SqlCommand(spName, DbConnection))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    using (var rdr = command.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            var dropD = new DropDown()
+                            {
+                                id = int.Parse(rdr["ID"].ToString()),
+                                value = rdr["Value"].ToString()
+                            };
+                            rtn.Add(dropD);
+                        }
+                    }
+                }
+                DbConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                // log
+                Logger.LogError("PhysiciansManager - " + "GetAllFacilityTypes() - " + ex.ToString());
+                throw ex;
+            }
+
+            return rtn;
+        }
+
+        public List<DropDown> GetAllBoardCertifications()
+        {
+            var rtn = new List<DropDown>();
+            var spName = "sp_GetAllBoardCertifications";
+            try
+            {
+                DbConnection.Open();
+                using (SqlCommand command = new SqlCommand(spName, DbConnection))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    using (var rdr = command.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            var dropD = new DropDown()
+                            {
+                                id = int.Parse(rdr["ID"].ToString()),
+                                value = rdr["Value"].ToString()
+                            };
+                            rtn.Add(dropD);
+                        }
+                    }
+                }
+                DbConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                // log
+                Logger.LogError("PhysiciansManager - " + "GetAllBoardCertifications() - " + ex.ToString());
+                throw ex;
+            }
+
+            return rtn;
+        }
+
+        public List<DropDown> GetAllSpecialInterests()
+        {
+            var rtn = new List<DropDown>();
+            var spName = "sp_GetAllSpecialInterests";
+            try
+            {
+                DbConnection.Open();
+                using (SqlCommand command = new SqlCommand(spName, DbConnection))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    using (var rdr = command.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            var dropD = new DropDown()
+                            {
+                                id = int.Parse(rdr["ID"].ToString()),
+                                value = rdr["Value"].ToString()
+                            };
+                            rtn.Add(dropD);
+                        }
+                    }
+                }
+                DbConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                // log
+                Logger.LogError("PhysiciansManager - " + "GetAllSpecialInterests() - " + ex.ToString());
+                throw ex;
+            }
+
+            return rtn;
+        }
+
+        // Methods //
+
         public void StoreFilterSearch(string value, string userid, string type, string sessionID, int sessionCount, string page )
         {
             try
@@ -204,5 +550,60 @@ namespace KIS_Core.Domain.Managers
            
         }
 
+        public void InsertPhysicianContact(string RequestID, int PhysicianID, string RequestType)        
+        {
+            try
+            {
+                var spName = "sp_InsertPhysicianRequest";
+
+                DbConnection.Open();
+                using (SqlCommand command = new SqlCommand(spName, DbConnection))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("PhysicianID", PhysicianID);
+                    command.Parameters.AddWithValue("RequestID", RequestID);
+                    command.Parameters.AddWithValue("Status", "Open");
+                    command.Parameters.AddWithValue("Type", RequestType);
+
+                    command.ExecuteNonQuery();
+                }
+                DbConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("PhysicianManager - " + "InsertPhysicianContact() - " + ex.ToString());
+                throw ex;
+            }
+        }
+
+        public void InsertPhysicianLog(string RequestID, string Type, string Field, string OldValue, string NewValue)
+        {
+            try
+            {
+                var spName = "sp_InsertPhysicianRequestLog";
+
+                DbConnection.Open();
+                using (SqlCommand command = new SqlCommand(spName, DbConnection))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    
+                    command.Parameters.AddWithValue("RequestID", RequestID);
+                    command.Parameters.AddWithValue("Type", Type);
+                    command.Parameters.AddWithValue("Field", Field);
+                    command.Parameters.AddWithValue("OldValue", OldValue);
+                    command.Parameters.AddWithValue("NewValue", NewValue);                    
+
+                    command.ExecuteNonQuery();
+                }
+                DbConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("PhysicianManager - " + "InsertPhysicianContact() - " + ex.ToString());
+                throw ex;
+            }
+        }
+        
     }
 }
