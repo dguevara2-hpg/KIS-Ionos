@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering;
+@using Microsoft.Extensions.Primitives;
+@using NonFactors.Mvc.Grid;
+
+@model IGrid
+
+<div>
+    <table id="jdtGrid" class="display" style="width:100%">
+        <thead>
+            <tr>
+                @foreach (IGridColumn column in Model.Columns)
+                {
+                <th>@column.Name</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (IGridRow<Object> row in Model.Rows)
+            {
+            <!tr@(row.Attributes)>
+                @foreach (IGridColumn column in Model.Columns)
+                {                        
+                <td>@column.ValueFor(row)</td>
+                }
+            </!tr>
+            }
+            @if (!Model.Rows.Any() && Model.EmptyText != null)
+            {
+            <tr class="mvc-grid-empty-row">
+                <td colspan="@Model.Columns.Count()">
+                    @Model.EmptyText
+                </td>
+            </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                @foreach (IGridColumn column in Model.Columns)
+                {
+                <th>@column.Name</th>
+                }
+            </tr>
+        </tfoot>
+    </table>
+</div>
