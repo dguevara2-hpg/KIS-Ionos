@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>KIS - @ViewData["Title"]</title>
+    @* <title>KIS - @ViewData["Title"]</title> *@
+    <title>KIS-Core-QA | @ViewData["Title"]</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
@@ -59,7 +60,8 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
         <div class="container-xxl">
-            <a class="navbar-brand" href="@Url.Action("Index", "Home")"><img src="~/Assets/img/HealthTrust_Logo_horiz.png" alt="..." /></a>
+            @* <a class="navbar-brand" href="@Url.Action("Index", "Home")"><img src="~/Assets/img/HealthTrust_Logo_horiz.png" alt="..." /></a> *@
+            <a class="navbar-brand" href="@Url.Action("Index", "Home")"><h2>KIS-CORE-QA</h2></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 Menu
                 <i class="fas fa-bars ms-1"></i>
@@ -232,8 +234,9 @@
             <div class="row align-items-center h-100">
                 <div class="col-lg-8 text-lg-start">Copyright &copy; 2023 Healthtrust | Knowledge Management Services | All rights reserved </div>
                 <div class="col-lg-4 text-lg-end">
-                    <a class="link-dark text-decoration-none me-3" href="#!">Privacy Policy</a>
-                    <a class="link-dark text-decoration-none" href="#!">Terms of Use</a>
+                    @* <a class="link-dark text-decoration-none me-3" href="#!">Privacy Policy</a>
+                    <a class="link-dark text-decoration-none" href="#!">Terms of Use</a> *@
+                    KIS-QA | V.1.0
                 </div>
             </div>
         </div>

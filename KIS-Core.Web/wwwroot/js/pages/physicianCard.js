@@ -67,7 +67,9 @@
             contentType: "application/json; charset=utf-8",
             success: function (data) {
                 if (data.error == true) {
-                    //
+                    //nothing to update
+                    $("#ToastBody").html(data.message);
+                    $("#PhysicianUpdateToast").show();
                 }
                 else { //success
                     $("#ToastBody").html(data.message);
@@ -133,7 +135,9 @@ function SavePhysicianProfile() {
             contentType: "application/json; charset=utf-8",
             success: function (data) {
                 if (data.error == true) {
-                    //sessionStorage.setItem("isRegistered", "error");                    
+                    //nothing to update
+                    $("#ToastBody").html(data.message);
+                    $("#PhysicianUpdateToast").show();                    
                 }
                 else { //success
                     $("#ToastBody").html(data.message);

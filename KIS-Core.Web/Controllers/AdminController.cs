@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Org.BouncyCastle.Asn1.X500;
 using System.Text;
 
 namespace KIS_Core.Web.Controllers
@@ -67,6 +68,8 @@ namespace KIS_Core.Web.Controllers
 
         public JsonResult PostContactCard(string PhysicianCard)
         {
+            var rtn = new { error = false, message = "" };
+
             if (PhysicianCard == null)
             {
                 var _message = "error";
@@ -134,15 +137,20 @@ namespace KIS_Core.Web.Controllers
                 bool _html1 = true;
                 var message1 = new Message(new string[] { _emailConfig.PhysicianUpdateRequestEmail }, updateType+ " Card " + _emailConfig.PhysicianUpdateRequestSubject, _body.ToString(), _html1);
                 _emailSender.SendEmail(message1);
+                rtn = new { error = false, message = updateType + " Update Request Submitted" };
             }
-
-            var rtn = new { error = false, message = updateType + " Update Request Submitted" };            
+            else
+            {
+                rtn = new { error = true, message = "Nothing to update" };
+            }            
 
             return Json(rtn);
         }
         public JsonResult PostPhysicianCard(string PhysicianCard)
         {
-            ;if (PhysicianCard == null)
+            var rtn = new { error = false, message = "" };
+
+            if (PhysicianCard == null)
             {
                 var _message = "error";
                 return Json(new { error = true, message = "" });
@@ -184,7 +192,7 @@ namespace KIS_Core.Web.Controllers
                 var differences = GetJsonDifferences(object1, object2);
                 var RequestID = Guid.NewGuid().ToString();
 
-                //pManager.InsertPhysicianContact(RequestID, _advisor.Id, updateType);
+                pManager.InsertPhysicianContact(RequestID, _advisor.Id, updateType);
 
                 var htmlDiferences = "<ul>";
                 foreach (var difference in differences)
@@ -195,7 +203,7 @@ namespace KIS_Core.Web.Controllers
                     var oldvalue = temp2[0];
                     var newvalue = temp2[1];
 
-                    //pManager.InsertPhysicianLog(RequestID, updateType, field, oldvalue, newvalue);
+                    pManager.InsertPhysicianLog(RequestID, updateType, field, oldvalue, newvalue);
                     var htmlOldValue = (oldvalue == "") ? "---" : oldvalue;
                     htmlDiferences += "<li>" + field + " : " + htmlOldValue + " => " + newvalue + "</li>";
                 }
@@ -216,10 +224,13 @@ namespace KIS_Core.Web.Controllers
 
                 bool _html1 = true;
                 var message1 = new Message(new string[] { _emailConfig.PhysicianUpdateRequestEmail }, updateType + " Card " + _emailConfig.PhysicianUpdateRequestSubject, _body.ToString(), _html1);
-                //_emailSender.SendEmail(message1);
+                _emailSender.SendEmail(message1);
+                
+                rtn = new { error = false, message = updateType + " Update Request Submitted" };
             }
-
-            var rtn = new { error = false, message = updateType + " Update Request Submitted" };
+            else {
+                rtn = new { error = true, message = "Nothing to update" };
+            }
 
             return Json(rtn);
         }
