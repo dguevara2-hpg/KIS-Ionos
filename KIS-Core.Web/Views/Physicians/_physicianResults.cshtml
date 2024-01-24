@@ -1,0 +1,158 @@
+﻿@model KIS_Core.Web.Models.PhysicianResultViewModel
+
+@*
+This code needs to match:
+    Shared/Components/LibraryResults/Default.cshtml
+Duplicate changes
+*@
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var cookie = document.getElementById("ShowSearchFeedback").value;
+        if (cookie == "yes") {
+            ShowFeedbackSearch();
+        }
+    });
+</script>
+
+<div id="physicianresults-section">
+
+    <input type="hidden" id="ShowSearchFeedback" value="@ViewBag.ShowSearchFeedback" />
+    <!-- Top Pill Bar -->
+    <div class="row">
+        <div id="filter-section" class="d-flex border border-top-0 p-3 p-sm-10 bg-light">
+            <div class="col-lg-11 col-sm-12 chip-set">
+                @if (Model.PillTabs != null)
+                {
+                    foreach (var tabs in Model.PillTabs)
+                    {
+                        if (tabs.types != "sorting")
+                        {
+                            <div class="chip visually" id="chipset-specialty">
+                                <span id="chipset-specialty-inner">@tabs.value</span>
+                                <a id="@tabs.value" onclick="RemoveFilter('@tabs.types', this)">
+                                    <i class="chip-close-icon material-icons">cancel</i>
+                                </a>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+            <div class="col-lg-1 col-sm-12">
+                <div class="btn-group">
+                    <button id="btnLibSort" type="button" class="btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        @ViewBag.SortSelection
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a id="sort-menu-list-Newest" class="dropdown-item" onclick="SaveFilter('sorting', this)">Newest</a></li>
+                        <li><a id="sort-menu-list-Oldest" class="dropdown-item" onclick="SaveFilter('sorting', this)">Oldest</a></li>
+                    </ul>
+                </div>
+                <br />
+                <span style="font-size:smaller">@Model.Result.Count().ToString() Resources</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Container -->
+    <div class="pb-2">
+        <div class="row">
+            @{
+                if (Model.Result.Count > 0)
+                {
+                    foreach (var i in @Model.Result)
+                    {
+                        if (i.DisplayName != "")
+                        {
+                            <div class="col-lg-4 col-sm-12 pb-4">
+                                <div class="cards-wrapper" style="min-width:251px !important;">
+                                    <div class="card">
+                                        <div class="PhysicianHeader card-img-top">
+                                            <h4>@i.DisplayName</h4>
+                                        </div>
+
+                                        <div class="card-body pb-4">
+                                            <div class="row">
+                                                <div class="col-9">
+                                                    @{
+                                                        if (i.Specialty != null)
+                                                        {
+                                                            foreach (var t in i.Specialty)
+                                                            {
+                                                                <h6 class="card-title">@t</h6>
+                                                            }
+                                                        }
+                                                    }
+                                                </div>
+                                                <div class="col-3">
+                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#physicianModal" onclick="ShowPhysician(@i.Id)">
+                                                        View
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    @{
+                                                        var elem1 = "";
+                                                        if (i.IDN != null)
+                                                        {
+                                                            foreach (var x in i.IDN)
+                                                            {
+                                                                elem1 += x + ", ";
+                                                            }
+                                                            elem1 = elem1.Substring(0, elem1.Length - 2);
+                                                        }
+                                                        <span style="font-style:italic; color:dimgray ">@elem1</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    };
+                }
+                else
+                {
+                    <div class="col-lg12 text-center vertical-centers mt-5">
+                        <img src="~/Assets/img/128px_nofilesfound.png" style="width:150px" />
+                        <h4>Sorry, no results were found.</h4>
+                        <span>Please click the button and let us know what you need. </span>
+                        <br /><br />
+                        <a class="btn btn-lg btn-primary" href="https://app.smartsheet.com/b/form/0d5a508cd8234c9987958dde5318cf93 " target="_blank">Submit a question</a>
+                    </div>
+
+                }
+            }
+        </div>
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="physicianModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" style="color:white;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div id="PhysicianDetails" class="modal-body physician-detail-background"></div>
+
+        </div>
+    </div>
+</div>
+
+
+<div id="physicianresults-error" style="display:none;">    
+    @Model.Error
+</div>
+
+@Html.Partial("_feedback")
+@Html.Partial("_feedbackSearch")
+
+
+
+
