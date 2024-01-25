@@ -14,7 +14,7 @@ namespace KIS_Core.Domain
         static Logger()
         {
             _errorLogger = new LoggerConfiguration()
-                .WriteTo.File("C:/home/site/wwwroot/wwwroot/assets/lo/KIS-Core-Logger.txt", rollingInterval: RollingInterval.Day)
+                .WriteTo.File("C:/inetpub/wwwroot/KIS_Core_QA/KIS-Core-QA-Logger.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
         }
 

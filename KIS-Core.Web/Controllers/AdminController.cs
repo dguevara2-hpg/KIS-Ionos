@@ -69,167 +69,180 @@ namespace KIS_Core.Web.Controllers
         public JsonResult PostContactCard(string PhysicianCard)
         {
             var rtn = new { error = false, message = "" };
-
-            if (PhysicianCard == null)
-            {
-                var _message = "error";
-                return Json(new { error = true, message = "" });
-            }
-
             var updateType = "Contact";
-            PhysicianAdvisor _advisor = JsonConvert.DeserializeObject<PhysicianAdvisor>(PhysicianCard);
-            PhysiciansManager pManager = new PhysiciansManager(DbConnection);
 
-            // preparing objects to be compared
-            var fullAdvisor = pManager.GetPhysicianDetails(_advisor.Id);
-            PhysicianAdvisor prevAdvisor = new PhysicianAdvisor()
-            {
-                Id = fullAdvisor.Id,
-                PhysicianFirstName = fullAdvisor.PhysicianFirstName,
-                PhysicianLastName = fullAdvisor.PhysicianLastName,
-                NPI = fullAdvisor.NPI,
-                BillingAddress = fullAdvisor.BillingAddress,
-                PrimaryEmail = fullAdvisor.PrimaryEmail,
-                SecondaryEmail = fullAdvisor.SecondaryEmail
-            };
-            var ajaxPrevAdvisor = JsonConvert.SerializeObject(prevAdvisor);
-            var ajaxNewAdvisor = JsonConvert.SerializeObject(_advisor);            
-            var AreEqual = JToken.DeepEquals(ajaxPrevAdvisor, ajaxNewAdvisor);
-
-            if (!AreEqual)
-            {
-                JObject object1 = JObject.Parse(ajaxPrevAdvisor);
-                JObject object2 = JObject.Parse(ajaxNewAdvisor);
-
-                var differences = GetJsonDifferences(object1, object2);
-                var RequestID = Guid.NewGuid().ToString();
-
-                pManager.InsertPhysicianContact(RequestID, _advisor.Id, updateType);
-
-                var htmlDiferences = "<ul>";
-                foreach (var difference in differences)
+            try
+            {                
+                if (PhysicianCard == null)
                 {
-                    var temp = difference.Split("|");
-                    var field = temp[0];
-                    var temp2 = temp[1].Split("=>");
-                    var oldvalue = temp2[0];
-                    var newvalue = temp2[1];
-
-                    pManager.InsertPhysicianLog(RequestID, updateType, field, oldvalue, newvalue);
-                    var htmlOldValue = (oldvalue == "") ? "---" : oldvalue;
-                    htmlDiferences += "<li>" + field + " : "  + htmlOldValue + " => " + newvalue + "</li>";
+                    var _message = "error";
+                    return Json(new { error = true, message = "" });
                 }
-                htmlDiferences += "</ul>";
+                
+                PhysicianAdvisor _advisor = JsonConvert.DeserializeObject<PhysicianAdvisor>(PhysicianCard);
+                PhysiciansManager pManager = new PhysiciansManager(DbConnection);
 
-                // SEND EMAIL
-                EmailManager _emailSender = new EmailManager(_emailConfig);
-                CommonController cc = new CommonController();
+                // preparing objects to be compared
+                var fullAdvisor = pManager.GetPhysicianDetails(_advisor.Id);
+                PhysicianAdvisor prevAdvisor = new PhysicianAdvisor()
+                {
+                    Id = fullAdvisor.Id,
+                    PhysicianFirstName = fullAdvisor.PhysicianFirstName,
+                    PhysicianLastName = fullAdvisor.PhysicianLastName,
+                    NPI = fullAdvisor.NPI,
+                    BillingAddress = fullAdvisor.BillingAddress,
+                    PrimaryEmail = fullAdvisor.PrimaryEmail,
+                    SecondaryEmail = fullAdvisor.SecondaryEmail
+                };
+                var ajaxPrevAdvisor = JsonConvert.SerializeObject(prevAdvisor);
+                var ajaxNewAdvisor = JsonConvert.SerializeObject(_advisor);
+                var AreEqual = JToken.DeepEquals(ajaxPrevAdvisor, ajaxNewAdvisor);
 
-                //Email message to the user requesting access                
-                StringBuilder _body = cc.ReadBodyFromTemplate(_emailConfig);
-                _body.Replace("{Request_ID}", RequestID);
-                _body.Replace("{Physician_Name}", _advisor.PhysicianFirstName + " " + _advisor.PhysicianLastName);
-                _body.Replace("{Type}", updateType);
-                _body.Replace("{Requested_Date}", DateTime.Today.ToShortDateString());
-                _body.Replace("{Primary_Email}", _advisor.PrimaryEmail);
-                _body.Replace("{Differences}", htmlDiferences);         
+                if (!AreEqual)
+                {
+                    JObject object1 = JObject.Parse(ajaxPrevAdvisor);
+                    JObject object2 = JObject.Parse(ajaxNewAdvisor);
 
-                bool _html1 = true;
-                var message1 = new Message(new string[] { _emailConfig.PhysicianUpdateRequestEmail }, updateType+ " Card " + _emailConfig.PhysicianUpdateRequestSubject, _body.ToString(), _html1);
-                _emailSender.SendEmail(message1);
-                rtn = new { error = false, message = updateType + " Update Request Submitted" };
+                    var differences = GetJsonDifferences(object1, object2);
+                    var RequestID = Guid.NewGuid().ToString();
+
+                    pManager.InsertPhysicianContact(RequestID, _advisor.Id, updateType);
+
+                    var htmlDiferences = "<ul>";
+                    foreach (var difference in differences)
+                    {
+                        var temp = difference.Split(":");
+                        var field = temp[0];
+                        var temp2 = temp[1].Split("=>");
+                        var oldvalue = temp2[0];
+                        var newvalue = temp2[1];
+
+                        pManager.InsertPhysicianLog(RequestID, updateType, field, oldvalue, newvalue);
+                        var htmlOldValue = (oldvalue == "") ? "---" : oldvalue;
+                        htmlDiferences += "<li>" + field + " : "  + htmlOldValue + " => " + newvalue + "</li>";
+                    }
+                    htmlDiferences += "</ul>";
+
+                    // SEND EMAIL
+                    EmailManager _emailSender = new EmailManager(_emailConfig);
+                    CommonController cc = new CommonController();
+
+                    //Email message to the user requesting access                
+                    StringBuilder _body = cc.ReadBodyFromTemplate(_emailConfig);
+                    _body.Replace("{Request_ID}", RequestID);
+                    _body.Replace("{Physician_Name}", _advisor.PhysicianFirstName + " " + _advisor.PhysicianLastName);
+                    _body.Replace("{Type}", updateType);
+                    _body.Replace("{Requested_Date}", DateTime.Today.ToShortDateString());
+                    _body.Replace("{Primary_Email}", _advisor.PrimaryEmail);
+                    _body.Replace("{Differences}", htmlDiferences);
+
+                    bool _html1 = true;
+                    var message1 = new Message(new string[] { _emailConfig.PhysicianUpdateRequestEmail }, updateType+ " Card " + _emailConfig.PhysicianUpdateRequestSubject, _body.ToString(), _html1);
+                    _emailSender.SendEmail(message1);
+                    rtn = new { error = false, message = updateType + " Update Request Submitted" };
+                }
+                else
+                {
+                    rtn = new { error = true, message = "Nothing to update" };
+                }
             }
-            else
+            catch (Exception ex)
             {
-                rtn = new { error = true, message = "Nothing to update" };
-            }            
+                KIS_Core.Domain.Logger.LogError("AdminController - " + "PostContactCard() - " + ex.ToString());
+            }
 
             return Json(rtn);
         }
         public JsonResult PostPhysicianCard(string PhysicianCard)
         {
             var rtn = new { error = false, message = "" };
-
-            if (PhysicianCard == null)
-            {
-                var _message = "error";
-                return Json(new { error = true, message = "" });
-            }
-            
             var updateType = "Profile";
-            
-            PhysicianAdvisorString _advisor = JsonConvert.DeserializeObject<PhysicianAdvisorString>(PhysicianCard);
-            PhysiciansManager pManager = new PhysiciansManager(DbConnection);
-
-            // preparing objects to be compared
-            var fullAdvisor = pManager.GetPhysicianDetails(_advisor.Id);
-
-            PhysicianAdvisorString prevAdvisor = new PhysicianAdvisorString()
+            try
             {
-                Id = fullAdvisor.Id,
-                //PrimaryEmail = fullAdvisor.PrimaryEmail,
-                Credentials = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.Credentials)),
-                Specialty = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.Specialty)),
-                Subspecialty = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.Subspecialty)),
-                //HealthSystem = new List<string>(),
-                HospitalAffiliations = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.HospitalAffiliations)),
-                FacilityType = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.FacilityType)),
-                //Education = new List<string>(),
-                Residency = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.Residency)),
-                Fellowships = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.Fellowships)),
-                BoardCertifications = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.BoardCertifications)),
-                Biography = fullAdvisor.Biography
-            };
-            var ajaxPrevAdvisor = JsonConvert.SerializeObject(prevAdvisor);
-            var ajaxNewAdvisor = JsonConvert.SerializeObject(_advisor);
-            var AreEqual = JToken.DeepEquals(ajaxPrevAdvisor, ajaxNewAdvisor);
-
-            if (!AreEqual)
-            {
-                JObject object1 = JObject.Parse(ajaxPrevAdvisor);
-                JObject object2 = JObject.Parse(ajaxNewAdvisor);
-
-                var differences = GetJsonDifferences(object1, object2);
-                var RequestID = Guid.NewGuid().ToString();
-
-                pManager.InsertPhysicianContact(RequestID, _advisor.Id, updateType);
-
-                var htmlDiferences = "<ul>";
-                foreach (var difference in differences)
+                if (PhysicianCard == null)
                 {
-                    var temp = difference.Split(":");
-                    var field = temp[0];
-                    var temp2 = temp[1].Split("=>");
-                    var oldvalue = temp2[0];
-                    var newvalue = temp2[1];
-
-                    pManager.InsertPhysicianLog(RequestID, updateType, field, oldvalue, newvalue);
-                    var htmlOldValue = (oldvalue == "") ? "---" : oldvalue;
-                    htmlDiferences += "<li>" + field + " : " + htmlOldValue + " => " + newvalue + "</li>";
+                    var _message = "error";
+                    return Json(new { error = true, message = "" });
                 }
-                htmlDiferences += "</ul>";
 
-                // SEND EMAIL
-                EmailManager _emailSender = new EmailManager(_emailConfig);
-                CommonController cc = new CommonController();
+                PhysicianAdvisorString _advisor = JsonConvert.DeserializeObject<PhysicianAdvisorString>(PhysicianCard);
+                PhysiciansManager pManager = new PhysiciansManager(DbConnection);
 
-                //Email message to the user requesting access                
-                StringBuilder _body = cc.ReadBodyFromTemplate(_emailConfig);
-                _body.Replace("{Request_ID}", RequestID);
-                _body.Replace("{Physician_Name}", fullAdvisor.PhysicianFirstName + " " + fullAdvisor.PhysicianLastName);
-                _body.Replace("{Type}", updateType);
-                _body.Replace("{Requested_Date}", DateTime.Today.ToShortDateString());
-                _body.Replace("{Primary_Email}", fullAdvisor.PrimaryEmail);
-                _body.Replace("{Differences}", htmlDiferences);
+                // preparing objects to be compared
+                var fullAdvisor = pManager.GetPhysicianDetails(_advisor.Id);
 
-                bool _html1 = true;
-                var message1 = new Message(new string[] { _emailConfig.PhysicianUpdateRequestEmail }, updateType + " Card " + _emailConfig.PhysicianUpdateRequestSubject, _body.ToString(), _html1);
-                _emailSender.SendEmail(message1);
-                
-                rtn = new { error = false, message = updateType + " Update Request Submitted" };
+                PhysicianAdvisorString prevAdvisor = new PhysicianAdvisorString()
+                {
+                    Id = fullAdvisor.Id,
+                    //PrimaryEmail = fullAdvisor.PrimaryEmail,
+                    Credentials = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.Credentials)),
+                    Specialty = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.Specialty)),
+                    Subspecialty = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.Subspecialty)),
+                    //HealthSystem = new List<string>(),
+                    HospitalAffiliations = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.HospitalAffiliations)),
+                    FacilityType = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.FacilityType)),
+                    //Education = new List<string>(),
+                    Residency = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.Residency)),
+                    Fellowships = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.Fellowships)),
+                    BoardCertifications = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.BoardCertifications)),
+                    Biography = fullAdvisor.Biography
+                };
+                var ajaxPrevAdvisor = JsonConvert.SerializeObject(prevAdvisor);
+                var ajaxNewAdvisor = JsonConvert.SerializeObject(_advisor);
+                var AreEqual = JToken.DeepEquals(ajaxPrevAdvisor, ajaxNewAdvisor);
+
+                if (!AreEqual)
+                {
+                    JObject object1 = JObject.Parse(ajaxPrevAdvisor);
+                    JObject object2 = JObject.Parse(ajaxNewAdvisor);
+
+                    var differences = GetJsonDifferences(object1, object2);
+                    var RequestID = Guid.NewGuid().ToString();
+
+                    pManager.InsertPhysicianContact(RequestID, _advisor.Id, updateType);
+
+                    var htmlDiferences = "<ul>";
+                    foreach (var difference in differences)
+                    {
+                        var temp = difference.Split(":");
+                        var field = temp[0];
+                        var temp2 = temp[1].Split("=>");
+                        var oldvalue = temp2[0];
+                        var newvalue = temp2[1];
+
+                        pManager.InsertPhysicianLog(RequestID, updateType, field, oldvalue, newvalue);
+                        var htmlOldValue = (oldvalue == "") ? "---" : oldvalue;
+                        htmlDiferences += "<li>" + field + " : " + htmlOldValue + " => " + newvalue + "</li>";
+                    }
+                    htmlDiferences += "</ul>";
+
+                    // SEND EMAIL
+                    EmailManager _emailSender = new EmailManager(_emailConfig);
+                    CommonController cc = new CommonController();
+
+                    //Email message to the user requesting access                
+                    StringBuilder _body = cc.ReadBodyFromTemplate(_emailConfig);
+                    _body.Replace("{Request_ID}", RequestID);
+                    _body.Replace("{Physician_Name}", fullAdvisor.PhysicianFirstName + " " + fullAdvisor.PhysicianLastName);
+                    _body.Replace("{Type}", updateType);
+                    _body.Replace("{Requested_Date}", DateTime.Today.ToShortDateString());
+                    _body.Replace("{Primary_Email}", fullAdvisor.PrimaryEmail);
+                    _body.Replace("{Differences}", htmlDiferences);
+
+                    bool _html1 = true;
+                    var message1 = new Message(new string[] { _emailConfig.PhysicianUpdateRequestEmail }, updateType + " Card " + _emailConfig.PhysicianUpdateRequestSubject, _body.ToString(), _html1);
+                    _emailSender.SendEmail(message1);
+
+                    rtn = new { error = false, message = updateType + " Update Request Submitted" };
+                }
+                else
+                {
+                    rtn = new { error = true, message = "Nothing to update" };
+                }
             }
-            else {
-                rtn = new { error = true, message = "Nothing to update" };
+            catch (Exception ex)
+            {
+                KIS_Core.Domain.Logger.LogError("AdminController - " + "PostPhysicianCard() - " + ex.ToString());
             }
 
             return Json(rtn);
