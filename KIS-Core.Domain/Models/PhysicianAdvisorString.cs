@@ -51,10 +51,10 @@ namespace KIS_Core.Domain.Models
             Credentials = Utils.ListToDelimited('|', Utils.SortList(advisor.Credentials));
             Specialty = Utils.ListToDelimited('|', Utils.SortList(advisor.Specialty));
             Subspecialty = Utils.ListToDelimited('|', Utils.SortList(advisor.Subspecialty));
-            //HealthSystem = Utils.ListToDelimited('|', advisor.HealthSystem);
+            IDN = Utils.ListToDelimited('|', advisor.IDN);
             HospitalAffiliations = Utils.ListToDelimited('|', Utils.SortList(advisor.HospitalAffiliations));
             FacilityType = Utils.ListToDelimited('|', Utils.SortList(advisor.FacilityType));
-            //Education = Utils.ListToDelimited('|', advisor.Education);
+            MedicalSchool = Utils.ListToDelimited('|', advisor.MedicalSchool);
             Residency = Utils.ListToDelimited('|', Utils.SortList(advisor.Residency));
             Fellowships = Utils.ListToDelimited('|', Utils.SortList(advisor.Fellowships));
             BoardCertifications = Utils.ListToDelimited('|', Utils.SortList(advisor.BoardCertifications));

@@ -55,6 +55,7 @@ namespace KIS_Core.Web.Controllers
             VM.ddlFacilityTypes = pManager.GetAllFacilityTypes();
             VM.ddlBoardCertifications = pManager.GetAllBoardCertifications();
             VM.ddlSpecialInterests = pManager.GetAllSpecialInterests();
+            VM.ddlHospitalAffiliations = pManager.GetAllHospitalAffiliations(myUser.emailAddress);
 
             VM.physicianAdvisor = pManager.GetPhysicianDetails(myUser.emailAddress);            
 
@@ -178,10 +179,10 @@ namespace KIS_Core.Web.Controllers
                     Credentials = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.Credentials)),
                     Specialty = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.Specialty)),
                     Subspecialty = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.Subspecialty)),
-                    //HealthSystem = new List<string>(),
+                    IDN = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.IDN)),
                     HospitalAffiliations = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.HospitalAffiliations)),
                     FacilityType = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.FacilityType)),
-                    //Education = new List<string>(),
+                    MedicalSchool = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.MedicalSchool)),
                     Residency = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.Residency)),
                     Fellowships = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.Fellowships)),
                     BoardCertifications = Utils.ListToDelimited('|', Utils.SortList(fullAdvisor.BoardCertifications)),

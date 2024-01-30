@@ -16,6 +16,7 @@ namespace KIS_Core.Web.Models
         public List<DropDown> ddlFacilityTypes { get; set; }
         public List<DropDown> ddlBoardCertifications { get; set; }
         public List<DropDown> ddlSpecialInterests { get; set; }
+        public List<string> ddlHospitalAffiliations { get; set; }
 
         // History
         public List<PhysicianAdvisor> RequestActivity { get; set; }

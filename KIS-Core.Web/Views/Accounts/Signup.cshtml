@@ -37,11 +37,11 @@
                         <div class="form-group mt-1">
                             <div class="row">
                                 <div class="col-6">
-                                    Facility/IDN:
+                                    Health System:
                                     <select class="form-control" id="reg_facilityidn" placeholder="Select Your facility/ IDN *" required>
                                         @foreach (var x in Model.facilityIDNlist)
                                         {
-                                            if (@x.FacilityName == "Your Facility/IDN")
+                                            if (@x.FacilityName == "Your Health System")
                                             {
                                                 <option value=@x.FacilityID disabled selected>@x.FacilityName</option>
                                             }

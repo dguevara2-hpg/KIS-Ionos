@@ -394,7 +394,7 @@ namespace KIS_Core.Domain.Managers
         public List<DropDown> GetAllHealthSystems()
         {
             var rtn = new List<DropDown>();
-            var spName = "sp_GetAllHealthSystems";
+            var spName = "sp_GetFacilities";
             try
             {
                 DbConnection.Open();
@@ -409,7 +409,7 @@ namespace KIS_Core.Domain.Managers
                             var dropD = new DropDown()
                             {
                                 id = int.Parse(rdr["ID"].ToString()),
-                                value = rdr["Value"].ToString()
+                                value = rdr["idn_name"].ToString()
                             };
                             rtn.Add(dropD);
                         }
@@ -423,6 +423,9 @@ namespace KIS_Core.Domain.Managers
                 Logger.LogError("PhysiciansManager - " + "GetAllHealthSystems() - " + ex.ToString());
                 throw ex;
             }
+
+            //remove value = your facility
+            rtn.Remove(new DropDown(){ id = 0, value = "Your Health System" });
 
             return rtn;
         }        
@@ -529,6 +532,40 @@ namespace KIS_Core.Domain.Managers
             {
                 // log
                 Logger.LogError("PhysiciansManager - " + "GetAllSpecialInterests() - " + ex.ToString());
+                throw ex;
+            }
+
+            return rtn;
+        }
+
+        public List<string> GetAllHospitalAffiliations(string emailaddress)
+        {
+            var rtn = new List<string>();
+            var spName = "sp_GetAllHospitalAffiliations";
+            try
+            {
+                DbConnection.Open();
+                using (SqlCommand command = new SqlCommand(spName, DbConnection))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@EmailAddress", emailaddress);
+
+                    using (var rdr = command.ExecuteReader())
+                    {                        
+                        if (rdr.Read())
+                        {
+                            var temp = rdr["HospitalAffiliations"].ToString();
+                            rtn = Utilities.Utils.DelimitedToList('|', temp);                            
+                        }
+                        
+                    }
+                }
+                DbConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                // log
+                Logger.LogError("PhysiciansManager - " + "GetAllHospitalAffiliations() - " + ex.ToString());
                 throw ex;
             }
 

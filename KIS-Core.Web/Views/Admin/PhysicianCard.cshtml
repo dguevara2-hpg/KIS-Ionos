@@ -123,7 +123,7 @@
                                     </select>
                                 </div>
                                 <div class="col-6 pb-4">
-                                    <label for="lblSubSpecialty" class="form-label">SubSpecialty </label>
+                                    <label for="lblSubSpecialty" class="form-label">Sub-Specialty </label>
                                     <select id="frmSubSpecialty" multiple="multiple" class="active">
                                         @foreach (var x in Model.ddlSubSpecialties)
                                         {
@@ -139,27 +139,36 @@
                                     </select>
                                 </div>
                                 <div class="col-6 pb-4">
+                                    @* Health System is also IDN *@
                                     <label for="lblHealthSystem" class="form-label">Health System</label>
                                     <select id="frmHealthSystem" multiple="multiple" class="active">
-                                        @*   @foreach (var x in Model)
+                                        @foreach (var x in Model.ddlHealthSystems)
                                         {
-                                        if (Model.physicianAdvisor.Credentials.Contains(x.value))
-                                        {
-                                        <option value="@x.value" selected>@x.value</option>
+                                            if (Model.physicianAdvisor.IDN.Contains(x.value))
+                                            {
+                                            <option value="@x.value" selected>@x.value</option>
+                                            }
+                                            else
+                                            {
+                                            <option value="@x.value">@x.value</option>
+                                            }
                                         }
-                                        else
-                                        {
-                                        <option value="@x.value">@x.value</option>
-                                        }
-                                        }*@
                                     </select>
                                 </div>
                                 <div class="col-6 pb-4">
                                     <label for="lblHospitalAffiliations" class="form-label">Hospital Affiliations</label>
                                     <select id="frmHospitalAffiliations" multiple="multiple" class="active">
-                                        @foreach (var x in Model.physicianAdvisor.HospitalAffiliations)
+                                        @foreach (var x in Model.ddlHospitalAffiliations)
                                         {
-                                            <option value="@x" selected>@x</option>
+                                            if (Model.physicianAdvisor.HospitalAffiliations.Contains(x))
+                                            {
+                                                <option value="@x" selected>@x</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@x">@x</option>
+                                            }
+
                                         }
                                     </select>
                                 </div>
@@ -180,7 +189,7 @@
                                     </select>
                                 </div>
                                 <div class="col-6 pb-4">
-                                    <label for="lblEducation" class="form-label">Education</label>
+                                    <label for="lblEducation" class="form-label">Medical School</label>
                                     <select id="frmEducation" multiple="multiple" class="active">
                                         @foreach (var x in Model.physicianAdvisor.MedicalSchool)
                                         {
