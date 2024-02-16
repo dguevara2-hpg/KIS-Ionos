@@ -130,7 +130,30 @@ namespace KIS_Core.Domain.Managers
             return rtn;
         }
 
+        public void SaveLoginHistory(string username, string sessionId)
+        {            
+            var spName = "sp_InsertUserLogin";
 
+            try
+            {
+                DbConnection.Open();
+                using (var command = new SqlCommand(spName, DbConnection))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;                    
+                    command.Parameters.AddWithValue("username", username);
+                    command.Parameters.AddWithValue("sessionID", sessionId);                    
+
+                    command.ExecuteScalar();                    
+                }
+                DbConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                // log                
+                Logger.LogError("UserManager - " + "SaveLoginHistory() - " + ex.ToString());
+                throw (ex);
+            }            
+        }
 
     }
 }

@@ -20,6 +20,7 @@ namespace KIS_Core.Web.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly LibraryConfig _libraryConfig = new LibraryConfig();
+        private readonly EnvironmentConfig _envConfig = new EnvironmentConfig();
         private string UserName;
         public SqlConnection DbConnection { get; set; }
 
@@ -27,6 +28,7 @@ namespace KIS_Core.Web.Controllers
         {
              _logger = logger;
             configuration.GetSection("KIS-Library").Bind(_libraryConfig);
+            configuration.GetSection("Environment").Bind(_envConfig);
             _httpContextAccessor = httpContextAccessor;
             DbConnection = dbConnection;
         }
@@ -94,7 +96,8 @@ namespace KIS_Core.Web.Controllers
             string json = System.IO.File.ReadAllText(filePath);
             homeVM.InProcess = JsonConvert.DeserializeObject<List<InProcess>>(json);
 
-
+            ViewBag.Environment = _envConfig.CurrentSetting;
+            ViewBag.Version = _envConfig.Version;
 
             return View(homeVM);
         }

@@ -61,31 +61,38 @@ namespace KIS_Core.Web.Controllers
         public JsonResult PostLogin(string username)
         {
             var user = new User();
+            var rtnObj = Json( new { error = true, message = "Email not found" } );
+
             try
             {
                 using (var aManager = new AccountsManager(DbConnection))
                 {
                     user = aManager.ValidateUser(username);
+
+                    // Store login history
+                    if (user.emailAddress != null)
+                    {
+                        CommonController CC = new CommonController();
+
+                        // SESSION Components
+                        CC.SetSessionTracker(_httpContextAccessor.HttpContext, new SessionTracker());
+
+                        // VALIDATE THE USER
+                        CC.SetSessionUser(_httpContextAccessor.HttpContext, user);
+
+                        aManager.SaveLoginHistory(user.username, CC.GetSessionTracker(_httpContextAccessor.HttpContext).Id) ;
+
+                        ViewBag.hiddenLogin = true;
+
+                        rtnObj = Json(new { error = false, message = "success" });
+                    }
+                    else
+                    {
+                        rtnObj =  Json(new { error = true, message = "Email not found" });
+                    }
                 }
 
-                if (user.emailAddress != null)
-                {
-                    CommonController CC = new CommonController();
-
-                    // SESSION Components
-                    CC.SetSessionTracker(_httpContextAccessor.HttpContext, new SessionTracker());
-
-                    // VALIDATE THE USER
-                    CC.SetSessionUser(_httpContextAccessor.HttpContext, user );                   
-
-                    ViewBag.hiddenLogin = true;
-
-                    return Json(new { error = false, message = "success" });
-                }
-                else
-                {
-                    return Json(new { error = true, message = "Email not found" });
-                }
+                return rtnObj;
             }
             catch (Exception ex)
             {

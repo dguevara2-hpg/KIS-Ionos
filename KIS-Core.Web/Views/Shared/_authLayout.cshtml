@@ -60,8 +60,16 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
         <div class="container-xxl">
-            <a class="navbar-brand" href="@Url.Action("Index", "Home")"><img src="~/Assets/img/HealthTrust_Logo_horiz.png" alt="..." /></a> 
-            @*  <a class="navbar-brand" href="@Url.Action("Index", "Home")"><h2>KIS-CORE-QA</h2></a> *@
+            @{
+                if (ViewBag.Environment != "PROD")
+                {
+                    <a class="navbar-brand" href="@Url.Action("Index", "Home")"><h2>KIS-CORE-@ViewBag.Environment</h2></a>
+                }
+                else{
+                    <a class="navbar-brand" href="@Url.Action("Index", "Home")"><img src="~/Assets/img/HealthTrust_Logo_horiz.png" alt="..." /></a>
+                }
+            }
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 Menu
                 <i class="fas fa-bars ms-1"></i>
@@ -237,7 +245,7 @@
                     @* <a class="link-dark text-decoration-none me-3" href="#!">Privacy Policy</a>
                     <a class="link-dark text-decoration-none" href="#!">Terms of Use</a> *@
                     @* KIS-QA | *@
-                    V.1.0
+                    @ViewBag.Version
                 </div>
             </div>
         </div>
