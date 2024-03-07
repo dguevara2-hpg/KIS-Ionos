@@ -90,7 +90,6 @@ function SavePhysicianProfile() {
     var isValid = true;
     var _credentials = _specialty = _subSpecialty = _healthSystem = _hospitalAffiliations = _facilityType = _education = _residency = _fellowship = _boardCertifications = _biography = "";
 
-
     var _id = $('#hiddenPhysicianID').val();
     //var _primaryEmail = $('#card_PrimaryEmail').val();
     _credentials = DelimitedString(document.querySelectorAll('#ms-list-1 li.selected'));
@@ -105,13 +104,63 @@ function SavePhysicianProfile() {
     _boardCertifications = DelimitedString(document.querySelectorAll('#ms-list-10 li.selected'));
     _biography = $('#frmBiography').val().trim();
 
-    var test = "";
-
+    // others
+    if (IncludesOther(_education)) {
+        if ($('#MedicalSchoolOther').val() == "") {
+            var fn = document.getElementById("MedicalSchoolOther");
+            fn.classList.remove("is-invalid");
+            fn.classList.add("is-invalid");
+            isValid = false;
+        }
+        else {
+            var fn = document.getElementById("MedicalSchoolOther");
+            fn.classList.remove("is-invalid");
+            _education = padDropdownResults(_education, $('#MedicalSchoolOther').val());
+        }
+    }
+    if (IncludesOther(_residency)) {
+        if ($('#ResidencyOther').val() == "") {
+            var fn = document.getElementById("ResidencyOther");
+            fn.classList.remove("is-invalid");
+            fn.classList.add("is-invalid");
+            isValid = false;
+        }
+        else {
+            var fn = document.getElementById("ResidencyOther");
+            fn.classList.remove("is-invalid");
+            _residency = padDropdownResults(_residency, $('#ResidencyOther').val());
+        }
+    }
+    if (IncludesOther(_fellowships)) {
+        if ($('#FellowshipOther').val() == "") {
+            var fn = document.getElementById("FellowshipOther");
+            fn.classList.remove("is-invalid");
+            fn.classList.add("is-invalid");
+            isValid = false;
+        }
+        else {
+            var fn = document.getElementById("FellowshipOther");
+            fn.classList.remove("is-invalid");
+            _fellowships = padDropdownResults(_fellowships, $('#FellowshipOther').val());
+        }
+    }
+    if (IncludesOther(_boardCertifications)) {
+        if ($('#BoardCertificationOther').val() == "") {
+            var fn = document.getElementById("BoardCertificationOther");
+            fn.classList.remove("is-invalid");
+            fn.classList.add("is-invalid");
+            isValid = false;
+        }
+        else {
+            var fn = document.getElementById("BoardCertificationOther");
+            fn.classList.remove("is-invalid");
+            _boardCertifications = padDropdownResults(_boardCertifications, $('#BoardCertificationOther').val());
+        }
+    }
 
     if (isValid) {        
         var _object = {
-            ID: _id,
-            //PrimaryEmail: _primaryEmail,
+            ID: _id,            
             Credentials: _credentials,
             Specialty: _specialty,
             SubSpecialty: _subSpecialty,
@@ -148,12 +197,8 @@ function SavePhysicianProfile() {
                 }                
             }
         });
-
     }
-
-
 }
-
 
 function ValidateLength(el) {
     if (el.value.length > 2) {
@@ -180,3 +225,31 @@ function DelimitedString(SelectedList) {
 function CloseToast() {
     $("#PhysicianUpdateToast").hide();
 };
+
+
+function DropdownChange(inputField, dropDown) {
+    var Selector = DelimitedString(document.querySelectorAll('#' + dropDown + ' li.selected')).split("|");
+    
+    if (IncludesOther(Selector)) {
+        $('#' + inputField).show();
+        $('#' + dropDown).removeClass("ms-active");
+    }
+    else {
+        $('#' + inputField).val("");
+        $('#' + inputField).hide();
+    }
+}
+
+function IncludesOther(Selector) {
+    if (Selector.includes('Other')) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+function padDropdownResults(demList, value) {
+    demList = demList.replace("|Other", "|Other = " + value);
+    return demList;
+}

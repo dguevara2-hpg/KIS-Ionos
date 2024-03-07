@@ -55,9 +55,15 @@ namespace KIS_Core.Web.Controllers
             VM.ddlFacilityTypes = pManager.GetAllFacilityTypes();
             VM.ddlBoardCertifications = pManager.GetAllBoardCertifications();
             VM.ddlSpecialInterests = pManager.GetAllSpecialInterests();
-            VM.ddlHospitalAffiliations = pManager.GetAllHospitalAffiliations(myUser.emailAddress);
+            VM.ddlHospitalAffiliations = Utils.SortList(pManager.GetAllHospitalAffiliations(myUser.emailAddress));
 
-            VM.physicianAdvisor = pManager.GetPhysicianDetails(myUser.emailAddress);            
+            VM.physicianAdvisor = pManager.GetPhysicianDetails(myUser.emailAddress);
+
+            // add others
+            VM.ddlHospitalAffiliations.Add("Other");
+            VM.physicianAdvisor.MedicalSchool.Add("Other");
+            VM.physicianAdvisor.Residency.Add("Other");
+            VM.physicianAdvisor.Fellowships.Add("Other");
 
             // enable/disable forms
             VM.DisableContactForm = pManager.IsContactFormDisabled(myUser.emailAddress, "Contact");            

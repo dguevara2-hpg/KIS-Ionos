@@ -157,7 +157,7 @@
                                 </div>
                                 <div class="col-6 pb-4">
                                     <label for="lblHospitalAffiliations" class="form-label">Hospital Affiliations</label>
-                                    <select id="frmHospitalAffiliations" multiple="multiple" class="active">
+                                    <select id="frmHospitalAffiliations" multiple="multiple" class="active" onchange="DropdownChange('HospitalAffiliationsOther', 'ms-list-5')">
                                         @foreach (var x in Model.ddlHospitalAffiliations)
                                         {
                                             if (Model.physicianAdvisor.HospitalAffiliations.Contains(x))
@@ -171,6 +171,7 @@
 
                                         }
                                     </select>
+                                    <input id="HospitalAffiliationsOther" name="HospitalAffiliationsOther" class="form-control" type="text" placeholder="Hospital Affiliations" style="display:none; margin-top:20px;">
                                 </div>
                                 <div class="col-6 pb-4">
                                     <label for="lblFacilityType" class="form-label">Facility Type</label>
@@ -190,34 +191,58 @@
                                 </div>
                                 <div class="col-6 pb-4">
                                     <label for="lblEducation" class="form-label">Medical School</label>
-                                    <select id="frmEducation" multiple="multiple" class="active">
+                                    <select id="frmEducation" multiple="multiple" class="active" onchange="DropdownChange('MedicalSchoolOther', 'ms-list-7')">
                                         @foreach (var x in Model.physicianAdvisor.MedicalSchool)
                                         {
-                                            <option value="@x" selected>@x</option>
+                                            if (x == "Other")
+                                            {
+                                                <option value="@x">@x</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@x" selected>@x</option>
+                                            }
                                         }
                                     </select>
+                                    <input id="MedicalSchoolOther" name="MedicalSchoolOther" class="form-control" type="text" placeholder="Other Medical School" style="display:none; margin-top:20px;">
                                 </div>
                                 <div class="col-6 pb-4">
                                     <label for="lblResidency" class="form-label">Residency</label>
-                                    <select id="frmResidency" multiple="multiple" class="active">
+                                    <select id="frmResidency" multiple="multiple" class="active" onchange="DropdownChange('ResidencyOther', 'ms-list-8')">
                                         @foreach (var x in Model.physicianAdvisor.Residency)
                                         {
-                                            <option value="@x" selected>@x</option>
+                                            if (x  == "Other")
+                                            {
+                                                <option value="@x">@x</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@x" selected>@x</option>
+                                            }    
                                         }
                                     </select>
+                                    <input id="ResidencyOther" name="ResidencyOther" class="form-control" type="text" placeholder="Other Residency" style="display:none; margin-top:20px;">
                                 </div>
                                 <div class="col-6 pb-4">
                                     <label for="lblFellowship" class="form-label">Fellowship</label>
-                                    <select id="frmFellowship" multiple="multiple" class="active">
+                                    <select id="frmFellowship" multiple="multiple" class="active" onchange="DropdownChange('FellowshipOther', 'ms-list-9')">
                                         @foreach (var x in Model.physicianAdvisor.Fellowships)
                                         {
-                                            <option value="@x" selected>@x</option>
+                                            if (x == "Other")
+                                            {
+                                                <option value="@x">@x</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@x" selected>@x</option>
+                                            }
                                         }
                                     </select>
+                                    <input id="FellowshipOther" name="FellowshipOther" class="form-control" type="text" placeholder="Other Fellowship" style="display:none; margin-top:20px;">
                                 </div>
                                 <div class="col-6 pb-4">
                                     <label for="lblBoardCertifications" class="form-label">Board Certifications</label>
-                                    <select id="frmBoardCertifications" multiple="multiple" class="active">
+                                    <select id="frmBoardCertifications" multiple="multiple" class="active" onchange="DropdownChange('BoardCertificationOther', 'ms-list-10')">
                                         @foreach (var x in Model.ddlBoardCertifications)
                                         {
                                             if (Model.physicianAdvisor.BoardCertifications.Contains(x.value))
@@ -230,6 +255,7 @@
                                             }
                                         }
                                     </select>
+                                    <input id="BoardCertificationOther" name="BoardCertificationOther" class="form-control" type="text" placeholder="Other Board Certification" style="display:none; margin-top:20px;">
                                 </div>
                                 <div class="col-6 pb-4">
                                     <label for="lblBiography" class="form-label">Biography</label>
@@ -240,49 +266,8 @@
                             </div>
                         </div>
                     </fieldset>
-                </form>
-                @*Profile History*@
-@*
-                <div class="row mt-5" style="font-size:small">
-                    <h5>Previous Activity</h5>
-                    <div class="col-12 justify-content-lg-center text-center">
-                        @if (Model.RequestActivity.Count > 0)
-                        {
-                            <table id="UserRequestActivityTable" class="table table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Role</th>
-                                        <th scope="col">Request Status</th>
-                                        <th scope="col">Email Type</th>
-                                        <th scope="col">User</th>
-                                        <th scope="col">Notes</th>
-                                        <th scope="col">Timestamp</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var act in Model.RequestActivity)
-                                {
-                                <tr data-id="@act.ActivityID">
-                                <td>@act.RoleName</td>
-                                <td>@act.RequestStatusName</td>
-                                <td>@act.EmailType</td>
-                                <td>@act.UserName</td>
-                                <td>@act.InternalNote</td>
-                                <td>@act.ActivityDate</td>
-                                </tr>
+                </form>           
 
-                                }
-                                </tbody>
-                            </table>
-                        }
-                        else
-                        {
-                            <span>No Activity Data</span>
-                        }
-
-                    </div>
-                </div>
-*@
                 @*Profile Buttons*@
                 <div class="form-group">
                     <div class="row mt-5">
@@ -343,24 +328,6 @@
                                 <label for="lblSecondaryEmail" class="form-label">Secondary Email </label>
                                 <input class="form-control" id="card_secondaryemail" type="text" onfocusout="ValidateLength(this)" value="@Model.physicianAdvisor.SecondaryEmail" placeholder="Secondary Email" />                                
                             </div>
-
-                            @*<div class="col-6 pb-4">
-                                <label for="lblSpecialInterest" class="form-label">Special Interest </label>
-                                <select id="card_specialinterest" multiple="multiple" class="active">
-                                    @foreach (var x in Model.ddlSpecialInterests)
-                                    {
-                                        if (Model.physicianAdvisor.spe.Contains(x.value))
-                                        {
-                                            <option value="@x.value" selected>@x.value</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="@x.value">@x.value</option>
-                                        }
-                                    }
-                                </select>
-                            </div>*@
-
                         </div>
                     </div>
                     </fieldset>
@@ -469,6 +436,6 @@
     function EditContactCard() {
         $("#EditContact").show();
         $("#EditProfile").hide();
-    };
+    }
 
 </script>
