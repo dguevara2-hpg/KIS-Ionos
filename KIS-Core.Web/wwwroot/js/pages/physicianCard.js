@@ -105,6 +105,19 @@ function SavePhysicianProfile() {
     _biography = $('#frmBiography').val().trim();
 
     // others
+    if (IncludesOther(_hospitalAffiliations)) {
+        if ($('#HospitalAffiliationsOther').val() == "") {
+            var fn = document.getElementById("HospitalAffiliationsOther");
+            fn.classList.remove("is-invalid");
+            fn.classList.add("is-invalid");
+            isValid = false;
+        }
+        else {
+            var fn = document.getElementById("HospitalAffiliationsOther");
+            fn.classList.remove("is-invalid");
+            _hospitalAffiliations = padDropdownResults(_hospitalAffiliations, $('#HospitalAffiliationsOther').val());
+        }
+    }
     if (IncludesOther(_education)) {
         if ($('#MedicalSchoolOther').val() == "") {
             var fn = document.getElementById("MedicalSchoolOther");
@@ -250,6 +263,14 @@ function IncludesOther(Selector) {
 }
 
 function padDropdownResults(demList, value) {
-    demList = demList.replace("|Other", "|Other = " + value);
+    var delimitedArray = demList.split("|");
+
+    if (delimitedArray.length > 1) {
+        demList = demList.replace("|Other", "|Other = " + value);
+    }
+    else {
+        demList = demList.replace("Other", "Other = " + value);
+    }
+    
     return demList;
 }
