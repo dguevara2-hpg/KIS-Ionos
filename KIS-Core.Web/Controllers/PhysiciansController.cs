@@ -16,6 +16,7 @@ namespace KIS_Core.Web.Controllers
         private readonly ILogger<PhysiciansController> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly LibraryConfig _libraryConfig = new LibraryConfig();
+        private readonly EnvironmentConfig _envConfig = new EnvironmentConfig();
         private string UserName;
         public SqlConnection DbConnection { get; set; }        
 
@@ -93,6 +94,9 @@ namespace KIS_Core.Web.Controllers
                 ViewBag.Search = (search != "" && search != null) ? search : "All";
                 ViewBag.Filter = (search != "" && search != null) ? "search" : "All";
                 ViewBag.Action = (search != "" && search != null) ? "save" : "All";
+
+                ViewBag.Environment = _envConfig.CurrentSetting;
+                ViewBag.Version = _envConfig.Version;
             }
             catch (Exception ex)
             {
@@ -324,8 +328,10 @@ namespace KIS_Core.Web.Controllers
                 CC.SetSessionTracker(_httpContextAccessor.HttpContext, mySession);
 
                 // total click count and reset if total is achieved
-                ViewBag.ShowSearchFeedback = (mySession.TotalCount % 5 == 0 && mySession.TotalCount != 0) ? "yes" : "no";                
+                ViewBag.ShowSearchFeedback = (mySession.TotalCount % 5 == 0 && mySession.TotalCount != 0) ? "yes" : "no";
 
+                ViewBag.Environment = _envConfig.CurrentSetting;
+                ViewBag.Version = _envConfig.Version;
             }
             catch (Exception ex)
             {
@@ -363,6 +369,9 @@ namespace KIS_Core.Web.Controllers
                 // Store Physician Click ()
                 mySession.IncrementPhysicianCount();
                 PhysicianClick(ID.ToString(), "DetailClick");
+
+                ViewBag.Environment = _envConfig.CurrentSetting;
+                ViewBag.Version = _envConfig.Version;
             }
             catch (Exception ex) 
             {
@@ -397,6 +406,9 @@ namespace KIS_Core.Web.Controllers
                 mySession.IncrementDocumentCount();
                 CC.SetSessionTracker(_httpContextAccessor.HttpContext, mySession);
             }
+
+            ViewBag.Environment = _envConfig.CurrentSetting;
+            ViewBag.Version = _envConfig.Version;
         }
 
     }

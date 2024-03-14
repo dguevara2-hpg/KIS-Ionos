@@ -116,6 +116,8 @@ namespace KIS_Core.Web.Controllers
             ViewBag.DocumentPath = _libraryConfig.DocumentPath;
             ViewBag.AnalyticsLink = _libraryConfig.AnalyticsLink;
             ViewBag.key = _libraryConfig.key;
+            ViewBag.Environment = _envConfig.CurrentSetting;
+            ViewBag.Version = _envConfig.Version;
 
             return View();
         }

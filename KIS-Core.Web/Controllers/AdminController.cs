@@ -18,6 +18,7 @@ namespace KIS_Core.Web.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly LibraryConfig _libraryConfig = new LibraryConfig();
         private readonly EmailConfig _emailConfig = new EmailConfig();
+        private readonly EnvironmentConfig _envConfig = new EnvironmentConfig();
         private string UserName;
         public SqlConnection DbConnection { get; set; }
 
@@ -27,6 +28,7 @@ namespace KIS_Core.Web.Controllers
             _httpContextAccessor = httpContextAccessor;
             configuration.GetSection("KIS-Library").Bind(_libraryConfig);
             configuration.GetSection("EmailConfiguration").Bind(_emailConfig);
+            configuration.GetSection("Environment").Bind(_envConfig);
             DbConnection = dbConnection;
         }
 
@@ -68,6 +70,9 @@ namespace KIS_Core.Web.Controllers
             // enable/disable forms
             VM.DisableContactForm = pManager.IsContactFormDisabled(myUser.emailAddress, "Contact");            
             VM.DisableProfileForm = pManager.IsContactFormDisabled(myUser.emailAddress, "Profile");
+
+            ViewBag.Environment = _envConfig.CurrentSetting;
+            ViewBag.Version = _envConfig.Version;
 
             return View("PhysicianCard", VM);
         }

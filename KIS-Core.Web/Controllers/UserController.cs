@@ -19,6 +19,7 @@ namespace KIS_Core.Web.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly LibraryConfig _libraryConfig = new LibraryConfig();
         private readonly EmailConfig _emailConfig = new EmailConfig();
+        private readonly EnvironmentConfig _envConfig = new EnvironmentConfig();
         private string UserName;
         public SqlConnection DbConnection { get; set; }
 
@@ -46,7 +47,10 @@ namespace KIS_Core.Web.Controllers
             UserName = myUser.username;            
 
             AccessRequestViewModel VM = new AccessRequestViewModel();
-            VM.CurrentUsers = uManager.GetAllUsers();            
+            VM.CurrentUsers = uManager.GetAllUsers();
+
+            ViewBag.Environment = _envConfig.CurrentSetting;
+            ViewBag.Version = _envConfig.Version;
 
             return View("AccessRequest", VM);
         }
@@ -88,6 +92,9 @@ namespace KIS_Core.Web.Controllers
             ViewBag.AnalyticsLink = _libraryConfig.AnalyticsLink;
             UserName = myUser.username;
             // ---
+
+            ViewBag.Environment = _envConfig.CurrentSetting;
+            ViewBag.Version = _envConfig.Version;
 
             try
             {

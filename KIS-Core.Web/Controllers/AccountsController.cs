@@ -16,12 +16,14 @@ namespace KIS_Core.Web.Controllers
         private readonly ILogger<AccountsController> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly EmailConfig _emailConfig = new EmailConfig();
+        private readonly EnvironmentConfig _envConfig = new EnvironmentConfig();
         private string UserName;
         public SqlConnection DbConnection { get; set; }
 
         public AccountsController(ILogger<AccountsController> logger, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, SqlConnection dbConnection)
         {
             _logger = logger;
+            configuration.GetSection("EmailConfiguration").Bind(_emailConfig);
             configuration.GetSection("EmailConfiguration").Bind(_emailConfig);
             _httpContextAccessor = httpContextAccessor;
             DbConnection = dbConnection;
@@ -41,6 +43,9 @@ namespace KIS_Core.Web.Controllers
             {
                 rvm.facilityIDNlist = aManager.GetFacilityIDN();
             }
+
+            ViewBag.Environment = _envConfig.CurrentSetting;
+            ViewBag.Version = _envConfig.Version;
 
             return View(rvm);
         }
@@ -83,6 +88,8 @@ namespace KIS_Core.Web.Controllers
                         aManager.SaveLoginHistory(user.username, CC.GetSessionTracker(_httpContextAccessor.HttpContext).Id) ;
 
                         ViewBag.hiddenLogin = true;
+                        ViewBag.Environment = _envConfig.CurrentSetting;
+                        ViewBag.Version = _envConfig.Version;
 
                         rtnObj = Json(new { error = false, message = "success" });
                     }
@@ -155,6 +162,9 @@ namespace KIS_Core.Web.Controllers
                         break;
                 }
             }
+
+            ViewBag.Environment = _envConfig.CurrentSetting;
+            ViewBag.Version = _envConfig.Version;
 
             return Json(rtn);
         }
