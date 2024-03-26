@@ -24,7 +24,8 @@ namespace KIS_Core.Web.Controllers
         {
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
-            configuration.GetSection("KIS-Library").Bind(_libraryConfig);            
+            configuration.GetSection("KIS-Library").Bind(_libraryConfig);
+            configuration.GetSection("Environment").Bind(_envConfig);
             DbConnection = dbConnection;
         }
 

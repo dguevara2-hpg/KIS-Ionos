@@ -29,6 +29,7 @@ namespace KIS_Core.Web.Controllers
             _httpContextAccessor = httpContextAccessor;
             configuration.GetSection("KIS-Library").Bind(_libraryConfig);
             configuration.GetSection("EmailConfiguration").Bind(_emailConfig);
+            configuration.GetSection("Environment").Bind(_envConfig);
             DbConnection = dbConnection;
         }
 
@@ -72,7 +73,7 @@ namespace KIS_Core.Web.Controllers
             return PartialView("_UserDetail", VM);
         }
 
-        public JsonResult PostUserDetails(string obj)
+        public ActionResult PostUserDetails(string obj)
         {
             var EmailTemplate = "";
             var EmailSubject = "";
@@ -93,6 +94,7 @@ namespace KIS_Core.Web.Controllers
             UserName = myUser.username;
             // ---
 
+            AccessRequestViewModel VM = new AccessRequestViewModel();
             ViewBag.Environment = _envConfig.CurrentSetting;
             ViewBag.Version = _envConfig.Version;
 
@@ -152,23 +154,27 @@ namespace KIS_Core.Web.Controllers
                         }
                     }
                     uManager.InsertRequestActivity(_user, ViewBag.User.username);
-                    rtn = true;
+                    VM.Error = false;
                     rtnMessage = "Settings saved for User: " + _user.firstName + " " + _user.lastName;
                 }
                 else
                 {
-                    rtn = false;
-                    rtnMessage = "Unexpected error occured while attempting to save";
+                    VM.Error = true;
+                    VM.Message = "Unexpected error occured while attempting to save";
                 }
                 
             }
             catch (Exception ex)
             {
-                rtn = false;
-                rtnMessage = "Unexpected error occured while attempting to save";
+                VM.Error = true;
+                VM.Message = "Unexpected error occured while attempting to save";
             }
 
-            return Json(new { error = rtn, message = rtnMessage });
+            VM.CurrentUsers = uManager.GetAllUsers();
+
+            //return Json(new { error = rtn, message = rtnMessage });
+
+            return PartialView("_AccessRequestList", VM);
         }
 
     }
