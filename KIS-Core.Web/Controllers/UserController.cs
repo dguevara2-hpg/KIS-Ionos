@@ -73,7 +73,7 @@ namespace KIS_Core.Web.Controllers
             return PartialView("_UserDetail", VM);
         }
 
-        public ActionResult PostUserDetails(string obj)
+        public JsonResult PostUserDetails(string obj)
         {
             var EmailTemplate = "";
             var EmailSubject = "";
@@ -94,7 +94,6 @@ namespace KIS_Core.Web.Controllers
             UserName = myUser.username;
             // ---
 
-            AccessRequestViewModel VM = new AccessRequestViewModel();
             ViewBag.Environment = _envConfig.CurrentSetting;
             ViewBag.Version = _envConfig.Version;
 
@@ -154,27 +153,23 @@ namespace KIS_Core.Web.Controllers
                         }
                     }
                     uManager.InsertRequestActivity(_user, ViewBag.User.username);
-                    VM.Error = false;
+                    rtn = true;
                     rtnMessage = "Settings saved for User: " + _user.firstName + " " + _user.lastName;
                 }
                 else
                 {
-                    VM.Error = true;
-                    VM.Message = "Unexpected error occured while attempting to save";
+                    rtn = false;
+                    rtnMessage = "Unexpected error occured while attempting to save";
                 }
-                
+
             }
             catch (Exception ex)
             {
-                VM.Error = true;
-                VM.Message = "Unexpected error occured while attempting to save";
+                rtn = false;
+                rtnMessage = "Unexpected error occured while attempting to save";
             }
 
-            VM.CurrentUsers = uManager.GetAllUsers();
-
-            //return Json(new { error = rtn, message = rtnMessage });
-
-            return PartialView("_AccessRequestList", VM);
+            return Json(new { error = rtn, message = rtnMessage }); 
         }
 
     }
