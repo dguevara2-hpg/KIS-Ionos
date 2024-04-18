@@ -9,6 +9,9 @@ namespace KIS_Core.Web.Models
 
         //data
         public List<User> CurrentUsers { get; set; }
+        public string Message { get; set; }
+        public bool Error { get; set; }
+
 
         public AccessRequestViewModel()
         {
