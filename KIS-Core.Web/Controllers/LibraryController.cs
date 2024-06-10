@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Http;
+using WebSupergoo.ABCpdf13;
+using IronPdf;
+using System.IO;
 
 namespace KIS_Core.Web.Controllers
 {
@@ -401,6 +404,29 @@ namespace KIS_Core.Web.Controllers
             }
 
             return this.Json(new { success = true, message = "Sucess" });
+        }
+
+        public ActionResult Document(int ID)
+        {
+            try
+            {
+                //byte[] theData = null;
+                //using (Doc doc = new Doc())
+                //{
+                //    doc.FontSize = 96;
+                //    doc.AddText("Hello World!");
+                //    theData = doc.GetData();
+                //}
+
+                //Read the File as Byte Array.
+                byte[] bytes = System.IO.File.ReadAllBytes("C:\\SampleDocs\\document1.pdf");
+                //Convert File to Base64 string and send to Client.
+                string base64 = Convert.ToBase64String(bytes, 0, bytes.Length);
+
+            }
+            catch (Exception ex) { }
+
+            return View();
         }
     }
 }
