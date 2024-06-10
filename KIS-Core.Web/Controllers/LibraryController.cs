@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Http;
-using WebSupergoo.ABCpdf13;
 using IronPdf;
 using System.IO;
 
