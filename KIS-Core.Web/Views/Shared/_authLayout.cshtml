@@ -78,12 +78,10 @@
                 <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
                     <li class="nav-item active "><a class="nav-link" href="https://app.smartsheet.com/b/form/0d5a508cd8234c9987958dde5318cf93" target="_blank">New Request</a></li>
                     <li class="nav-item">@Html.ActionLink("Learning Library", "Index", "Library", new { }, new { @class = "nav-link" }) </li>
-                    
                     @if(ViewBag.User != null && (ViewBag.User.roleID == 1 || ViewBag.User.roleID == 2 ) )
                     {
                         <li class="nav-item">@Html.ActionLink("Physician Advisors", "Index", "Physicians", new { }, new { @class = "nav-link" }) </li>
-                    }                    
-                    
+                    }
                     <li class="nav-item">@Html.ActionLink("About", "About", "Home", new { }, new { @class = "nav-link" }) </li>
                     @if (ViewBag.User == null)
                     {
@@ -205,6 +203,7 @@
                         <h2 class="title">ABOUT</h2>
                         <ul class="list-unstyled">
                             <li>@Html.ActionLink("About the team", "About", "Home", new { }, new { @class = "" }) </li>
+                            <li>@Html.ActionLink("FAQ", "FAQ", "Home", new { }, new { @class = "" }) </li>
                         </ul>
                     </div>
                 </div>
@@ -288,6 +287,15 @@
         </div>
     </div>
 
-    <script src="//code.tidio.co/bni7gh2yhxp5kynusmqbmc4gu9pjt0wl.js" async></script>
+
+    <script src="~/js/Tidio/Aimee.js"></script>
+
+    @*@if (ViewBag.User != null)
+    *@{
+        @*CODE TO ENABLE TIDIO by Lyra*@
+        <script src="//code.tidio.co/bni7gh2yhxp5kynusmqbmc4gu9pjt0wl.js" async></script>
+        @*CODE TO ENABLE TIDIO by Lyra*@
+   @* }*@
+    
 </body>
 </html>

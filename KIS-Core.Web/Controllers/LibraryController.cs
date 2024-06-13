@@ -407,8 +407,31 @@ namespace KIS_Core.Web.Controllers
 
         public ActionResult Document(int ID)
         {
+            //change view model to Document VM
+            LibraryViewModel libraryVM = new LibraryViewModel();
+
+            CommonController CC = new CommonController();
+            LibraryManager LM = new LibraryManager(DbConnection);
+
             try
             {
+                // SESSION Components
+                var mySession = CC.GetSessionTracker(_httpContextAccessor.HttpContext);
+
+                // VALIDATE THE USER
+                var myUser = CC.GetSessionUser(_httpContextAccessor.HttpContext);
+                ViewBag.User = (myUser.guid == "") ? null : myUser;
+                ViewBag.AnalyticsLink = _libraryConfig.AnalyticsLink;
+                UserName = myUser.username;
+
+                // Library document (JSON)
+                ViewBag.DocumentPath = _libraryConfig.DocumentPath;
+                //ViewBag.key = _libraryConfig.key;
+                var _lib = LM.GetLibrary();
+                var asc = _lib.OrderByDescending(o => o.Modified).ToList();
+                var _LocalLibrary = asc;
+
+
                 //byte[] theData = null;
                 //using (Doc doc = new Doc())
                 //{
@@ -425,7 +448,7 @@ namespace KIS_Core.Web.Controllers
             }
             catch (Exception ex) { }
 
-            return View();
+            return View(libraryVM);
         }
     }
 }

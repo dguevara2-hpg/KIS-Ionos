@@ -1,0 +1,298 @@
+﻿@model KIS_Core.Web.Models.HomeViewModel
+@{
+    ViewBag.Title = "FAQ";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/faqs/faq-3/assets/css/faq-3.css">
+
+<style>
+    .accordion-button {
+        color: #0a58ca !important;
+    }
+</style>
+
+<div>
+    <main role="main" class="pt-5 pb-5" style="margin-top:40px;" >        
+        <!-- FAQ -->
+        <section class="bsb-faq-3 py-3 py-md-5 py-xl-8">
+            <div class="container">
+                <div class="row justify-content-md-center">
+                    <div class="col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6">
+                        <h2 class="mb-4 display-5 text-center">Frequently Asked Questions</h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQs: Submitting a Request -->
+            <div class="mb-8" style="margin-top:75px;">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-11 col-xl-10">
+                            <div class="d-flex align-items-end mb-5">
+                                <h3 class="m-0">Submitting a Request</h3>
+                            </div>
+                        </div>
+                        <div class="col-11 col-xl-10">
+                            <div class="accordion accordion-flush" id="faqAccount">
+                                <div class="accordion-item bg-transparent border-top border-bottom py-3">
+                                    <h2 class="accordion-header" id="faqAccountHeading1">
+                                        <button class="accordion-button collapsed bg-transparent fw-bold shadow-none link- link-primary" type="button" data-bs-toggle="collapse" data-bs-target="#faqAccountCollapse1" aria-expanded="false" aria-controls="faqAccountCollapse1">
+                                            I’m not finding the resource I need; how do I request a new one?
+                                        </button>
+                                    </h2>
+                                    <div id="faqAccountCollapse1" class="accordion-collapse collapse" aria-labelledby="faqAccountHeading1">
+                                        <div class="accordion-body">
+                                            <p>
+                                                We’re happy to help you with the resources you need. Simply click ‘new request’ at the top of the screen and describe the clinical question or the problem you are trying to solve. A team member will contact you with any additional questions.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item bg-transparent border-bottom py-3">
+                                    <h2 class="accordion-header" id="faqAccountHeading2">
+                                        <button class="accordion-button collapsed bg-transparent fw-bold shadow-none link-primary" type="button" data-bs-toggle="collapse" data-bs-target="#faqAccountCollapse2" aria-expanded="false" aria-controls="faqAccountCollapse2">
+                                            Who can submit a resource request?
+                                        </button>
+                                    </h2>
+                                    <div id="faqAccountCollapse2" class="accordion-collapse collapse" aria-labelledby="faqAccountHeading2">
+                                        <div class="accordion-body">
+                                            <p>
+                                                Any HealthTrust member or internal partner can submit a resource request.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item bg-transparent border-bottom py-3">
+                                    <h2 class="accordion-header" id="faqAccountHeading3">
+                                        <button class="accordion-button collapsed bg-transparent fw-bold shadow-none link-primary" type="button" data-bs-toggle="collapse" data-bs-target="#faqAccountCollapse3" aria-expanded="false" aria-controls="faqAccountCollapse3">
+                                            How do I submit a resource request?
+                                        </button>
+                                    </h2>
+                                    <div id="faqAccountCollapse3" class="accordion-collapse collapse" aria-labelledby="faqAccountHeading3">
+                                        <div class="accordion-body">
+                                            <p>
+                                                Click ‘new request’ at the top of the screen and describe the clinical question or the problem you are trying to solve.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQs: Maintenance -->
+            <div class="mb-8">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-11 col-xl-10">
+                            <div class="d-flex align-items-end mb-5">
+                                <h3 class="m-0">Maintenance</h3>
+                            </div>
+                        </div>
+                        <div class="col-11 col-xl-10">
+                            <div class="accordion accordion-flush" id="faqOrder">
+                                <div class="accordion-item bg-transparent border-top border-bottom py-3">
+                                    <h2 class="accordion-header" id="faqOrderHeading1">
+                                        <button class="accordion-button collapsed bg-transparent fw-bold shadow-none link-primary" type="button" data-bs-toggle="collapse" data-bs-target="#faqOrderCollapse1" aria-expanded="false" aria-controls="faqOrderCollapse1">
+                                            How frequently are the resources updated?
+                                        </button>
+                                    </h2>
+                                    <div id="faqOrderCollapse1" class="accordion-collapse collapse" aria-labelledby="faqOrderHeading1">
+                                        <div class="accordion-body">
+                                            <p>
+                                                Resources are updated on a routine schedule (every 18 months) or as requested to support the sourcing team and members.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQs: About the Resources -->
+            <div class="mb-0">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-11 col-xl-10">
+                            <div class="d-flex align-items-end mb-5">
+                                <h3 class="m-0">About the Resources</h3>
+                            </div>
+                        </div>
+                        <div class="col-11 col-xl-10">
+                            <div class="accordion accordion-flush" id="faqRefund">
+                                <div class="accordion-item bg-transparent border-top border-bottom py-3">
+                                    <h2 class="accordion-header" id="faqRefundHeading1">
+                                        <button class="accordion-button collapsed bg-transparent fw-bold shadow-none link-primary" type="button" data-bs-toggle="collapse" data-bs-target="#faqRefundCollapse1" aria-expanded="false" aria-controls="faqRefundCollapse1">
+                                            What is the background of the teams who inform these resources?
+                                        </button>
+                                    </h2>
+                                    <div id="faqRefundCollapse1" class="accordion-collapse collapse" aria-labelledby="faqRefundHeading1">
+                                        <div class="accordion-body">
+                                            <p>
+                                                Resources are primarily created by the Clinical Services team.  This team is comprised of clinicians, physician advisors, and HealthTrust supply chain and value analysis experts.  Additionally, our clinical advisory board and HealthTrust Huddle members often contribute feedback in categories.
+                                            </p>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item bg-transparent border-bottom py-3">
+                                    <h2 class="accordion-header" id="faqRefundHeading2">
+                                        <button class="accordion-button collapsed bg-transparent fw-bold shadow-none link-primary" type="button" data-bs-toggle="collapse" data-bs-target="#faqRefundCollapse2" aria-expanded="false" aria-controls="faqRefundCollapse2">
+                                            What are the most recently added resources?
+                                        </button>
+                                    </h2>
+                                    <div id="faqRefundCollapse2" class="accordion-collapse collapse" aria-labelledby="faqRefundHeading2">
+                                        <div class="accordion-body">
+                                            <p> The most recently added resources are as follow:</p>
+                                            <ul>
+                                                @{
+                                                    foreach (var inprocess in @Model.InProcess)
+                                                    {
+                                                        <li>
+                                                            @inprocess.DocumentName
+                                                        </li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQs: About the Library -->
+            <div class="mb-8">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-11 col-xl-10">
+                            <div class="d-flex align-items-end mb-5">
+                                <h3 class="m-0">About the Library</h3>
+                            </div>
+                        </div>
+
+                        <div class="col-11 col-xl-10">
+                            <div class="accordion accordion-flush" id="faqOrder">
+                                <div class="accordion-item bg-transparent border-top border-bottom py-3">
+                                    <h2 class="accordion-header" id="faqOrderHeading1">
+                                        <button class="accordion-button collapsed bg-transparent fw-bold shadow-none link-primary" type="button" data-bs-toggle="collapse" data-bs-target="#faqOrderCollapse1" aria-expanded="false" aria-controls="faqOrderCollapse1">
+                                            How do I get access to the Knowledge Library?
+                                        </button>
+                                    </h2>
+                                    <div id="faqOrderCollapse1" class="accordion-collapse collapse" aria-labelledby="faqOrderHeading1">
+                                        <div class="accordion-body">
+                                            <p>
+                                                Click here to request access to the Knowledge Library.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                <div class="accordion-item bg-transparent border-top border-bottom py-3">
+                            <h2 class="accordion-header" id="faqAccountHeading1">
+                                <button class="accordion-button collapsed bg-transparent fw-bold shadow-none link- link-primary" type="button" data-bs-toggle="collapse" data-bs-target="#faqAccountCollapse1" aria-expanded="false" aria-controls="faqAccountCollapse1">
+                                    Who has access to the Knowledge Library?
+                                </button>
+                            </h2>
+                            <div id="faqAccountCollapse1" class="accordion-collapse collapse" aria-labelledby="faqAccountHeading1">
+                                <div class="accordion-body">
+                                    <p>
+                                        The library is open to all HealthTrust members across all departments of their organization and is accessible to all members. You do not need a PASS account or member portal access to leverage this resource.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQs: Resources -->
+            <div class="mb-8">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-11 col-xl-10">
+                            <div class="d-flex align-items-end mb-5">
+                                <h3 class="m-0">Resources</h3>
+                            </div>
+                        </div>
+                        <div class="col-11 col-xl-10">
+                            <div class="accordion accordion-flush" id="faqOrder">
+                                <div class="accordion-item bg-transparent border-top border-bottom py-3">
+                                    <h2 class="accordion-header" id="faqOrderHeading1">
+                                        <button class="accordion-button collapsed bg-transparent fw-bold shadow-none link-primary" type="button" data-bs-toggle="collapse" data-bs-target="#faqOrderCollapse1" aria-expanded="false" aria-controls="faqOrderCollapse1">
+                                            Can I talk to other members about their experience around a standardization initiative?
+                                        </button>
+                                    </h2>
+                                    <div id="faqOrderCollapse1" class="accordion-collapse collapse" aria-labelledby="faqOrderHeading1">
+                                        <div class="accordion-body">
+                                            <p>
+                                                Of course! HealthTrust provides a collaborative community network for our members to ask questions, share concerns and provide feedback on topics that impact you. Sign up and begin collaborating today – huddle.healthtrustpg.com or search ‘HealthTrust Huddle’ on your mobile device.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item bg-transparent border-top border-bottom py-3">
+                                    <h2 class="accordion-header" id="faqAccountHeading1">
+                                        <button class="accordion-button collapsed bg-transparent fw-bold shadow-none link- link-primary" type="button" data-bs-toggle="collapse" data-bs-target="#faqAccountCollapse1" aria-expanded="false" aria-controls="faqAccountCollapse1">
+                                            How do I get access to the Huddle?
+                                        </button>
+                                    </h2>
+                                    <div id="faqAccountCollapse1" class="accordion-collapse collapse" aria-labelledby="faqAccountHeading1">
+                                        <div class="accordion-body">
+                                            <p>
+                                                Click here to sign up for the Huddle to start connecting today.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQs: Site Improvements -->
+            <div class="mb-8">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-11 col-xl-10">
+                            <div class="d-flex align-items-end mb-5">
+                                <h3 class="m-0">Site Improvements</h3>
+                            </div>
+                        </div>
+                        <div class="col-11 col-xl-10">
+                            <div class="accordion accordion-flush" id="faqOrder">
+                                <div class="accordion-item bg-transparent border-top border-bottom py-3">
+                                    <h2 class="accordion-header" id="faqOrderHeading1">
+                                        <button class="accordion-button collapsed bg-transparent fw-bold shadow-none link-primary" type="button" data-bs-toggle="collapse" data-bs-target="#faqOrderCollapse1" aria-expanded="false" aria-controls="faqOrderCollapse1">
+                                            How do I submit a Knowledge Library site improvement suggestion?
+                                        </button>
+                                    </h2>
+                                    <div id="faqOrderCollapse1" class="accordion-collapse collapse" aria-labelledby="faqOrderHeading1">
+                                        <div class="accordion-body">
+                                            <p>
+                                                Email clinical.services@healthtrustpg.com with your suggested site improvements.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+</div>

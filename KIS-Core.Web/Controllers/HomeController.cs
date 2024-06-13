@@ -104,14 +104,19 @@ namespace KIS_Core.Web.Controllers
 
         public IActionResult About()
         {
-            // user and cookie tracking
-            //UserController uc = new UserController();
+            var lConn = new SqlConnection(DbConnection.ConnectionString);
+            CommonController CC = new CommonController();
 
-            //var myUser = uc.GetUser(Request);
-            //var mySession = uc.GetSessionTracker(Request, Response);
-            //ViewBag.User = (myUser.guid == "") ? null : myUser;
-            //UserName = myUser.username;
-            // ---
+            // SESSION Components
+            var mySession = CC.GetSessionTracker(_httpContextAccessor.HttpContext);
+
+            // VALIDATE THE USER
+            var myUser = CC.GetSessionUser(_httpContextAccessor.HttpContext);
+            ViewBag.User = (myUser.guid == "") ? null : myUser;
+            ViewBag.AnalyticsLink = _libraryConfig.AnalyticsLink;
+            UserName = myUser.username;
+            ViewBag.Welcome = myUser.firstName;
+            //
 
             ViewBag.DocumentPath = _libraryConfig.DocumentPath;
             ViewBag.AnalyticsLink = _libraryConfig.AnalyticsLink;
@@ -120,6 +125,37 @@ namespace KIS_Core.Web.Controllers
             ViewBag.Version = _envConfig.Version;
 
             return View();
+        }
+
+        public IActionResult FAQ()
+        {
+            var lConn = new SqlConnection(DbConnection.ConnectionString);
+            HomeViewModel homeVM = new HomeViewModel();
+            CommonController CC = new CommonController();
+
+            // SESSION Components
+            var mySession = CC.GetSessionTracker(_httpContextAccessor.HttpContext);
+
+            // VALIDATE THE USER
+            var myUser = CC.GetSessionUser(_httpContextAccessor.HttpContext);
+            ViewBag.User = (myUser.guid == "") ? null : myUser;
+            ViewBag.AnalyticsLink = _libraryConfig.AnalyticsLink;
+            UserName = myUser.username;
+            ViewBag.Welcome = myUser.firstName;
+            //
+
+            // in process
+            string filePath = _libraryConfig.LibraryPath + "in_process.json";
+            string json = System.IO.File.ReadAllText(filePath);
+            homeVM.InProcess = JsonConvert.DeserializeObject<List<InProcess>>(json);
+
+            ViewBag.DocumentPath = _libraryConfig.DocumentPath;
+            ViewBag.AnalyticsLink = _libraryConfig.AnalyticsLink;
+            ViewBag.key = _libraryConfig.key;
+            ViewBag.Environment = _envConfig.CurrentSetting;
+            ViewBag.Version = _envConfig.Version;
+
+            return View(homeVM);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

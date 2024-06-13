@@ -187,16 +187,6 @@
                                     }
                                 </div>
                             </div>
-                            @*
-                                <div class="card-footer p-0">
-                                    <div class="d-flex justify-content-end ripple-white px-3 py-2">
-                                        <div class="d-flex align-items-center p-2">
-                                            <div class="fst-button">Full Report</div>
-                                            <i class="material-icons icon-sm ms-1">chevron_right</i>
-                                        </div>
-                                    </div>
-                                </div>
-                            *@
                         </div>
                     </div>
                     <div class="col-lg-4 col-sm-6 mb-4">
@@ -207,29 +197,17 @@
                                 <div class="list-group list-group-flush list-group-light">
                                     <div class="list-group-item d-flex justify-content-between px-0">
                                         <div class="caption font-monospace text-opacity-25"></div>
-                                        @*<div class="caption font-monospace text-opacity-25 ms-2">Type</div>*@
                                     </div>
 
                                     @{ foreach (var completed in @Model.Completed.CompletedResc)
                                         {
                                             <div class="list-group-item d-flex justify-content-between px-0">
                                                 @completed.DocumentTitle
-                                                @*<div class="ms-2">@completed.ItemType</div>*@
                                             </div>
                                         }
                                     }
                                 </div>
                             </div>
-                            @*
-                                <div class="card-footer p-0">
-                                    <div class="d-flex justify-content-end ripple-white px-3 py-2">
-                                        <div class="d-flex align-items-center p-2">
-                                            <div class="fst-button">Full Report</div>
-                                            <i class="material-icons icon-sm ms-1">chevron_right</i>
-                                        </div>
-                                    </div>
-                                </div>
-                            *@
                         </div>
                     </div>
                     <div class="col-lg-4 col-sm-6 mb-4">
@@ -240,28 +218,16 @@
                                 <div class="list-group list-group-flush list-group-light">
                                     <div class="list-group-item d-flex justify-content-between px-0">
                                         <div class="caption font-monospace text-opacity-25"></div>
-                                        @*<div class="caption font-monospace text-opacity-25 ms-2">Type</div>*@
                                     </div>
                                     @{ foreach (var inprocess in @Model.InProcess)
                                         {
                                             <div class="list-group-item d-flex justify-content-between px-0">
                                                 @inprocess.DocumentName
-                                                @*<div class="ms-2">@completed.ItemType</div>*@
                                             </div>
                                         }
                                     }
                                 </div>
                             </div>
-                            @*
-                                <div class="card-footer p-0">
-                                    <div class="d-flex justify-content-end ripple-white px-3 py-2">
-                                        <div class="d-flex align-items-center p-2">
-                                            <div class="fst-button">Full Report</div>
-                                            <i class="material-icons icon-sm ms-1">chevron_right</i>
-                                        </div>
-                                    </div>
-                                </div>
-                            *@
                         </div>
                     </div>
                 </div>
