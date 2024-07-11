@@ -8,6 +8,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Http;
 using IronPdf;
 using System.IO;
+using Google.Protobuf.WellKnownTypes;
 
 namespace KIS_Core.Web.Controllers
 {
@@ -408,7 +409,7 @@ namespace KIS_Core.Web.Controllers
         public ActionResult Document(int ID)
         {
             //change view model to Document VM
-            LibraryViewModel libraryVM = new LibraryViewModel();
+            ResourceViewModel resVM = new ResourceViewModel();
 
             CommonController CC = new CommonController();
             LibraryManager LM = new LibraryManager(DbConnection);
@@ -425,30 +426,30 @@ namespace KIS_Core.Web.Controllers
                 UserName = myUser.username;
 
                 // Library document (JSON)
-                ViewBag.DocumentPath = _libraryConfig.DocumentPath;
-                //ViewBag.key = _libraryConfig.key;
-                var _lib = LM.GetLibrary();
-                var asc = _lib.OrderByDescending(o => o.Modified).ToList();
-                var _LocalLibrary = asc;
+                ViewBag.DocumentPath = _libraryConfig.DocumentPath;                                
+                var SelectedResource = from x in LM.GetLibrary() where x.Id == ID select x;
+                KmLibrary myResource = SelectedResource.Any() ? (KmLibrary)SelectedResource.FirstOrDefault() : new KmLibrary();
 
-
-                //byte[] theData = null;
-                //using (Doc doc = new Doc())
+                /// WRITING TO DATABASE  /// 
+                //if (filter != "All" && value != "")
                 //{
-                //    doc.FontSize = 96;
-                //    doc.AddText("Hello World!");
-                //    theData = doc.GetData();
+                //lManager.StoreFilterSearch(value, myUser.username, (filter == "search") ? "search" : "filter", mySession.Id, mySession.TotalCount, "Learning Library");
+                //}
                 //}
 
-                //Read the File as Byte Array.
-                byte[] bytes = System.IO.File.ReadAllBytes("C:\\SampleDocs\\document1.pdf");
-                //Convert File to Base64 string and send to Client.
-                string base64 = Convert.ToBase64String(bytes, 0, bytes.Length);
+                ////Read the File as Byte Array.
+                //byte[] bytes = System.IO.File.ReadAllBytes("C:\\SampleDocs\\document1.pdf");
+                ////Convert File to Base64 string and send to Client.
+                //string base64 = Convert.ToBase64String(bytes, 0, bytes.Length);
 
+                resVM.Document = myResource;
+                resVM.Overview = LM.GetDocumentOverview(ID);
+                resVM.Summary = LM.GetDocumentSummary(ID);
+                //resVM.Doc64bit = base64;
             }
             catch (Exception ex) { }
 
-            return View(libraryVM);
+            return View(resVM);
         }
     }
 }

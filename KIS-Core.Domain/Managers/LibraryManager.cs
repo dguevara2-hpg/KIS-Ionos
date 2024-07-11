@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using KIS_Core.Domain.Models;
 using System.IO;
 using KIS_Core.Domain.Utilities;
+using Microsoft.Identity.Client;
 
 namespace KIS_Core.Domain.Managers
 {
@@ -125,6 +126,71 @@ namespace KIS_Core.Domain.Managers
 
             return rtn;
         }
-        
+     
+        public string GetDocumentOverview(int ID)
+        {
+            string rtn = "";
+
+            try
+            {
+
+                // db connection                 
+                DbConnection.Open();
+
+                StringBuilder sqlQuery = new StringBuilder();
+                sqlQuery.AppendLine("SELECT Overview FROM Documents WHERE ID = @ID");
+
+                using (SqlCommand command = new SqlCommand(sqlQuery.ToString(), DbConnection))
+                {                              
+                    command.Parameters.AddWithValue("@ID", ID);                    
+                    
+                    var _scalar = command.ExecuteScalar();
+                    if (_scalar != null) { rtn = _scalar.ToString(); }                    
+                }
+                DbConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                // log
+                Logger.LogError("LibraryManager - " + "GetDocumentOverview() - " + ex.ToString());
+                throw ex;
+            }
+
+            return rtn;
+
+        }
+
+        public string GetDocumentSummary(int ID)
+        {
+            string rtn = "";
+
+            try
+            {
+
+                // db connection                 
+                DbConnection.Open();
+
+                StringBuilder sqlQuery = new StringBuilder();
+                sqlQuery.AppendLine("SELECT Summary FROM Documents WHERE ID = @ID");
+
+                using (SqlCommand command = new SqlCommand(sqlQuery.ToString(), DbConnection))
+                {
+                    command.Parameters.AddWithValue("@ID", ID);
+
+                    var _scalar = command.ExecuteScalar();
+                    if (_scalar != null) { rtn = _scalar.ToString(); }
+                }
+                DbConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                // log
+                Logger.LogError("LibraryManager - " + "GetDocumentSummary() - " + ex.ToString());
+                throw ex;
+            }
+
+            return rtn;
+
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿
+﻿@model KIS_Core.Web.Models.ResourceViewModel
 
 <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
 
@@ -18,7 +18,7 @@
 
     To disable the option to download and/or print the PDF file, set the "showDownloadPDF" and/or the "showPrintPDF" property to false.
     */
-    var urlToPDF = appPath + "/Assets/Documents/Sample1.pdf";
+    var urlToPDF = appPath + "/Assets/Documents/" + @Model.Document.Link;
     var viewerOptions = {
         embedMode: "FULL_WINDOW",
         defaultViewMode: "FIT_WIDTH",
@@ -91,25 +91,45 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item"><a href="#">Library</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Document Title</li>
+                        <li class="breadcrumb-item">@Html.ActionLink("Learning Library", "Index", "Library")></li>
+                        <li class="breadcrumb-item active" aria-current="page">@Model.Document.DocumentTitle</li>
                     </ol>
                 </nav>
 
-                <button type="button" class="btn btn-secondary">Insight Category</button>
+                <button type="button" class="btn btn-secondary">@Model.Document.InsightCategory.FirstOrDefault()</button>
 
                 <div class="row" style="margin-top:100px;">
                     <div class="col-9">
-                        <h4>Document Title goes here </h4>
+                        <h4>@Model.Document.DocumentTitle </h4>
                     </div>
-                    <div class="col-3" style="border:1px solid orange"> 
-                        <button type="button" class="btn btn-outline-primary">Preview</button>
-                        <br />
+                    <div class="col-3"> 
+                        <button type="button" class="btn btn-outline-primary" onclick="OpenResourcePreview()">Preview</button>
+                        <br/>
+                        <br/>                        
                         <button type="button" class="btn btn-primary">Download</button>
                     </div>
                 </div>
 
+                <div class="row" style="margin-top:80px">
 
+                    <div class="custom-tab" id="custom-document-tabs">
+                        <ul class="nav nav-tabs nav-justified" id="custom-tab" role="tablist">
+                            <div class="slider"></div>
+
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" id="pills-overview-tab" data-bs-toggle="pill" data-bs-target="#pills-overview" type="button" role="tab" aria-controls="pills-overview" aria-selected="true">Overview</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="pills-summary-tab" data-bs-toggle="pill" data-bs-target="#pills-summary" type="button" role="tab" aria-controls="pills-summary" aria-selected="false">Summary</a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="pills-placeholder-tab" data-bs-toggle="pill" data-bs-target="#pills-placeholder" type="button" role="tab" aria-controls="pills-placeholder" aria-selected="false">Placeholder</a>
+                            </li>                            
+                        </ul>
+                    
+                    </div>
+
+                </div>
             </div>
             <div class="col-1"></div>
         </div>
@@ -119,8 +139,46 @@
 
 
 
+
 @* 
     <div id="adobe-dc-view"></div> 
     <div class="col-11" style="height:1000px;">
 *@
+
+
+
+<div class="modal fade" id="ResourcePreviewModal">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Resource Preview</h4>
+                <button type="button" style="color:white;" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div id="ResourcePreview" class="modal-body">
+                 <div id="adobe-dc-view"></div> 
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+    function OpenResourcePreview(){
+        debugger;
+        $("#ResourcePreviewModal").modal("show");
+    }    
+
+    function CloseResourcePreview(){
+
+    }
+</script>
+
+
+
+
+
 

@@ -105,25 +105,7 @@ Duplicate changes
                                         }
                                         <div class="card-body pb-4">
                                             <h6 class="card-title" style="height:50px !important;">@i.DocumentTitle</h6>
-                                            @*@{ foreach (var x in i.Specialty)
-                            {
-                            <span>@x | </span>
-                            }
-                            }*@
-                                            @{
-                                                var hyperlink = ViewBag.DocumentPath + i.Link; //+ ViewBag.key;
-                                            }
-
-                                            @if (ViewBag.User == null)
-                                            {
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">View</button>
-                                            }
-                                            else
-                                            {
-                                                <a id="@i.Id" href="@hyperlink" class="btn btn-primary" target="_blank"
-                                                   onclick="ShowFeedback('@i.Id', '@i.DocumentTitle' )">View</a>
-                                                //onclick="StoreDocumentClick(this,'@i.DocumentTitle' )"
-                                            }
+                                            <a id="@i.Id" href="@Url.Action("Document", "Library", new { id = i.Id } )" class="btn btn-primary" onclick="ShowFeedback('@i.Id', '@i.DocumentTitle' )">View</a>
                                         </div>
                                     </div>
                                 </div>
